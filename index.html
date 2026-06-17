@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lo Shu Grid – Numerology</title>
+  <title>MyNumerologyApp – Numerology</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -141,10 +141,10 @@
     button {
       width: 100%;
       padding: 0.75rem;
-      background: linear-gradient(135deg, #b8860b, var(--accent));
+      background: linear-gradient(135deg, #005f8e, #0096c7);
       border: none;
       border-radius: 8px;
-      color: #0a0a14;
+      color: #ffffff;
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
@@ -221,10 +221,29 @@
       color: var(--accent);
     }
 
-    /* ── 3-column grid ── */
+    /* ── Grids + Name Breakdown row ── */
+    .grids-breakdown-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+      align-items: start;
+      margin-bottom: 1.5rem;
+    }
+    .name-compound-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+      align-items: start;
+      margin-bottom: 1.5rem;
+    }
+    .loshu-grid-sm { gap: 6px; }
+    .loshu-grid-sm .cell-number { font-size: 0.55rem; }
+    .loshu-grid-sm .cell-dots   { font-size: 0.95rem; letter-spacing: 0; }
+
+    /* ── 3-column grid (legacy) ── */
     .result-columns {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 1.25rem;
       align-items: start;
     }
@@ -365,7 +384,7 @@
     /* ── Core Numbers row ── */
     .core-numbers-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -434,6 +453,202 @@
       color: var(--text-muted);
       margin-bottom: 0.3rem;
     }
+    .angel-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #facc15;
+      background: rgba(250,204,21,0.1);
+      border: 1px solid rgba(250,204,21,0.28);
+      border-radius: 20px;
+      padding: 0.15rem 0.55rem;
+      margin-top: 0.3rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+    .theme-btn {
+      flex: 1;
+      padding: 0.45rem 0.25rem;
+      background: var(--cell-bg);
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: 0.03em;
+      margin: 0;
+      width: auto;
+      border-radius: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-btn + .theme-btn { border-left: 1px solid var(--border); }
+    .theme-btn:hover { transform: none; opacity: 1; }
+    .theme-btn:active { transform: none; }
+    .theme-btn:not(.active):hover { background: var(--surface); color: var(--text); }
+    .theme-btn.active { background: #0096c7; color: #ffffff; }
+
+    /* ── Reference link buttons ── */
+    .ref-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .ref-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      width: auto;
+      border-radius: 8px;
+      text-align: left;
+      letter-spacing: 0;
+    }
+    .ref-link-btn:hover { border-color: #0096c7; color: var(--text); transform: none; opacity: 1; }
+    .ref-link-btn .ref-icon { font-size: 1rem; flex-shrink: 0; }
+    body.light-theme {
+      --bg: #f0ede8;
+      --surface: #ffffff;
+      --surface2: #e8e3db;
+      --accent: #8b5e0a;
+      --accent2: #6d28d9;
+      --text: #1c1408;
+      --text-muted: #6b5a3e;
+      --border: #c9b99a;
+      --cell-bg: #faf7f2;
+      --cell-filled: #efe7d8;
+      --radius: 14px;
+    }
+    body.light-theme input[type="date"],
+    body.light-theme input[type="text"] { color-scheme: light; }
+    body.light-theme .navbar { background: #e8e3db; border-bottom-color: #c9b99a; }
+    body.light-theme .cell.filled { border-color: #b09060; }
+    body.light-theme .cell.filled.strong { border-color: var(--accent); box-shadow: 0 0 16px rgba(139,94,10,0.22); }
+    body.light-theme button { background: linear-gradient(135deg, #005f8e, #0096c7); color: #fff; }
+    body.light-theme .method-btn.active,
+    body.light-theme .theme-btn.active { background: #0096c7; color: #ffffff; }
+    body.light-theme .method-btn:not(.active),
+    body.light-theme .theme-btn:not(.active) { background: #ffffff; color: #1c1408; }
+    body.light-theme .method-btn:not(.active):hover,
+    body.light-theme .theme-btn:not(.active):hover { background: #f0f4f8; color: #1c1408; }
+    body.light-theme .bn-dn-row-table thead tr { background: rgba(0,96,199,0.08); }
+    body.light-theme .bn-dn-row-table th { color: #005f8e; border-color: #c9b99a; }
+    body.light-theme .bn-dn-row-table td { border-color: #c9b99a; }
+    body.light-theme .bn-dn-row-table tbody tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+    body.light-theme .bn-dn-row-table tr.dn-highlight td { background: rgba(0,96,199,0.05); }
+    body.light-theme .ccr-badge.auspicious   { background: rgba(22,101,52,0.1); color: #166534; border-color: #166534aa; }
+    body.light-theme .ccr-chain-num.ausp     { color: #166534; background: rgba(22,101,52,0.1); border-color: #16653455; }
+    body.light-theme .bn-dn-row-table td.cat-friend { color: #166534; }
+    body.light-theme .bn-dn-row-table td.cat-neutral { color: #a16207; }
+    body.light-theme .bn-dn-badge.friend { background: rgba(22,101,52,0.1); color: #166534; border-color: #16653455; }
+
+    /* ── Numerology method toggle ── */
+    .method-toggle {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .method-btn {
+      flex: 1;
+      padding: 0.5rem 0.25rem;
+      background: var(--cell-bg);
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: 0.04em;
+      margin: 0;
+      width: auto;
+      border-radius: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .method-btn + .method-btn { border-left: 1px solid var(--border); }
+    .method-btn:hover { transform: none; opacity: 1; }
+    .method-btn:active { transform: none; }
+    .method-btn:not(.active):hover { background: var(--surface); color: var(--text); }
+    .method-btn.active { background: #0096c7; color: #ffffff; }
+
+    /* ── Compound auspicious check ── */
+    .compound-check-rows { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem; }
+    .compound-check-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.55rem 0.9rem;
+    }
+    .ccr-label { font-size: 0.72rem; color: var(--text-muted); flex-shrink: 0; min-width: 80px; text-transform: uppercase; letter-spacing: 0.07em; }
+    .ccr-word  { font-size: 0.88rem; font-weight: 600; color: var(--text); flex: 1; }
+    .ccr-num   { font-size: 1.1rem; font-weight: 800; color: var(--accent); flex-shrink: 0; }
+    .ccr-chain {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3px;
+      padding-top: 0.4rem;
+      border-top: 1px solid var(--border);
+      margin-top: 0.1rem;
+    }
+    .ccr-chain-num {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.12rem 0.45rem;
+      border-radius: 4px;
+    }
+    .ccr-chain-num.ausp   { color: #4ade80; background: rgba(74,222,128,0.12);  border: 1px solid #4ade8033; }
+    .ccr-chain-num.inausp { color: #f87171; background: rgba(248,113,113,0.12); border: 1px solid #f8717133; }
+    .ccr-chain-arrow { font-size: 0.6rem; color: var(--text-muted); }
+    .ccr-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .ccr-badge.auspicious   { background: rgba(74,222,128,0.15);  color: #4ade80; border: 1px solid #4ade8055; }
+    .ccr-badge.inauspicious { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid #f8717155; }
+    .ccr-badge.outofrange   { background: rgba(148,163,184,0.10); color: #94a3b8; border: 1px solid #94a3b855; }
+    .compound-check-row.total-row { border-color: var(--accent); background: var(--surface); }
+    .ccr-meaning {
+      width: 100%;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 0.35rem;
+      border-top: 1px solid var(--border);
+      margin-top: 0.1rem;
+    }
+    .ccr-meaning strong { color: var(--accent); font-weight: 600; }
 
     /* ── Digit frequency ── */
     .freq-bar-list { display: flex; flex-direction: column; gap: 0.55rem; }
@@ -476,6 +691,118 @@
     }
     .no-missing { color: var(--accent); font-size: 0.88rem; }
 
+    /* ── BN–DN Relationship ── */
+    .bn-dn-body {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+    .bn-dn-num-block {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1.2rem;
+    }
+    .bn-dn-num-block .bdn-val {
+      font-size: 2.4rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .bn-dn-num-block.bn-block .bdn-val {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .bn-dn-num-block.dn-block .bdn-val {
+      background: linear-gradient(135deg, #f472b6, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .bdn-meta .bdn-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+    .bdn-meta .bdn-planet {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .bn-dn-arrow {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .bn-dn-relation {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+    .bn-dn-badge {
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 0.4rem 1.4rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .bn-dn-badge.friend  { background: rgba(74,222,128,0.15);  color: #4ade80; border: 1px solid #4ade8055; }
+    .bn-dn-badge.neutral { background: rgba(250,204,21,0.12);  color: #facc15; border: 1px solid #facc1555; }
+    .bn-dn-badge.enemy   { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid #f8717155; }
+    .bn-dn-badge.unknown { background: rgba(148,163,184,0.12); color: #94a3b8; border: 1px solid #94a3b855; }
+    .bn-dn-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .bn-dn-table-wrap {
+      flex: 1;
+      min-width: 240px;
+    }
+    .bn-dn-row-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .bn-dn-row-table thead tr {
+      background: rgba(255,255,255,0.07);
+    }
+    .bn-dn-row-table th {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--accent);
+      padding: 0.55rem 0.75rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      border-right: 1px solid var(--border);
+      font-weight: 700;
+    }
+    .bn-dn-row-table th:last-child { border-right: none; }
+    .bn-dn-row-table td {
+      padding: 0.42rem 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .bn-dn-row-table td:last-child { border-right: none; }
+    .bn-dn-row-table tbody tr:last-child td { border-bottom: none; }
+    .bn-dn-row-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+    .bn-dn-row-table td.cat-friend  { color: #4ade80; font-weight: 600; }
+    .bn-dn-row-table td.cat-neutral { color: #facc15; font-weight: 600; }
+    .bn-dn-row-table td.cat-enemy   { color: #f87171; font-weight: 600; }
+    .bn-dn-row-table tr.dn-highlight td { background: rgba(255,255,255,0.06); }
+
     /* ── Yutis ── */
     .yuti-subtitle {
       font-size: 0.75rem;
@@ -514,6 +841,112 @@
       box-shadow: 0 0 12px rgba(192,132,252,0.22);
     }
     .yuti-full-card h3 { margin-bottom: 0.4rem; }
+
+    /* ── Name breakdown ── */
+    .name-breakdown-body {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    .name-part {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1.1rem;
+      min-width: 140px;
+    }
+    .name-part-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+    .name-part-word {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .name-part-letters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 0.5rem;
+    }
+    .name-letter-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 5px;
+      min-width: 22px;
+    }
+    .name-letter-chip .nl { font-size: 0.75rem; font-weight: 700; color: var(--text); text-transform: uppercase; }
+    .name-letter-chip .nv { font-size: 0.65rem; color: var(--accent2); }
+    .name-part-sum {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.3rem;
+    }
+    .compound-num {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      background: rgba(226,185,111,0.1);
+      border: 1px solid rgba(226,185,111,0.3);
+      border-radius: 6px;
+      padding: 0.1rem 0.45rem;
+    }
+    .sum-arrow {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .reduced-num {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent2);
+    }
+    .name-part-sum strong { color: var(--accent); }
+    .name-breakdown-arrow {
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .name-total-box {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 0.85rem 1.3rem;
+      text-align: center;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .name-total-box .ntl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .name-total-box .nts { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .name-total-box .ntv-compound {
+      font-size: 2rem; font-weight: 900; color: var(--accent);
+      background: rgba(226,185,111,0.1);
+      border: 1px solid rgba(226,185,111,0.3);
+      border-radius: 8px;
+      padding: 0.1rem 0.5rem;
+      display: inline-block;
+      margin-bottom: 0.2rem;
+    }
+    .name-total-box .ntv-arrow { font-size: 1rem; color: var(--text-muted); margin: 0.1rem 0; }
+    .name-total-box .ntv {
+      font-size: 2rem; font-weight: 900;
+      background: linear-gradient(135deg, #34d399, #60a5fa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
     .yuti-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -581,15 +1014,12 @@
 
     /* ── Responsive: collapse to single column below 900px ── */
     @media (max-width: 1100px) {
-      .result-columns { grid-template-columns: 1fr 1fr; }
-      .col-analysis { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
       .core-numbers-row { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 760px) {
       .page-body { flex-direction: column; }
       .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
       .result-columns { grid-template-columns: 1fr; }
-      .col-analysis { grid-column: 1; display: flex; flex-direction: column; }
       .core-numbers-row { grid-template-columns: 1fr 1fr; }
       main { padding: 1.5rem 1rem; }
       .navbar { padding: 0 1rem; }
@@ -602,7 +1032,7 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <div class="logo">☰</div>
-      <h1>Lo Shu Grid</h1>
+      <h1>MyNumerologyApp</h1>
     </div>
     <span class="navbar-sub">Numerology · Date of Birth Analysis</span>
   </nav>
@@ -617,38 +1047,29 @@
         <input type="date" id="dob" max="" />
         <label for="name" style="margin-top:1rem;">Full Name</label>
         <input type="text" id="name" placeholder="Enter full name" autocomplete="off" />
+        <label style="margin-top:1rem;">Numerology System</label>
+        <div class="method-toggle">
+          <button class="method-btn active" id="btn-chaldean" onclick="setMethod('chaldean')">Chaldean</button>
+          <button class="method-btn" id="btn-pythagorean" onclick="setMethod('pythagorean')">Pythagorean</button>
+        </div>
         <button onclick="calculate()">Generate Grid</button>
-      </div>
+        <div class="theme-toggle">
+          <button class="theme-btn" id="btn-dark" onclick="setTheme('dark')">🌙 Dark</button>
+          <button class="theme-btn" id="btn-light" onclick="setTheme('light')">☀️ Light</button>
+        </div>
 
-      <div class="sidebar-section">
-        <h2>Legend</h2>
-        <div class="legend">
-          <div class="legend-item">
-            <div class="legend-swatch empty">—</div>
-            <span>Number absent from DOB</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-swatch filled">1</div>
-            <span>Number present</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-swatch strong">3</div>
-            <span>Appears 3+ times (strong)</span>
-          </div>
+        <div class="ref-links">
+          <a class="ref-link-btn" href="compound-numbers.html" target="_blank">
+            <span class="ref-icon">📖</span>
+            Compound Numbers Guide
+          </a>
+          <a class="ref-link-btn" href="yutis.html" target="_blank">
+            <span class="ref-icon">🪐</span>
+            Vedic Yutis Reference
+          </a>
         </div>
       </div>
 
-      <div class="sidebar-section">
-        <h2>Grid Layout</h2>
-        <div class="legend" style="font-size:0.78rem; color: var(--text-muted); line-height:2;">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;text-align:center;font-family:monospace;">
-            <span style="color:var(--accent)">4</span><span style="color:var(--accent)">9</span><span style="color:var(--accent)">2</span>
-            <span style="color:var(--accent)">3</span><span style="color:var(--accent)">5</span><span style="color:var(--accent)">7</span>
-            <span style="color:var(--accent)">8</span><span style="color:var(--accent)">1</span><span style="color:var(--accent)">6</span>
-          </div>
-          <p style="margin-top:0.5rem">Classic 3×3 magic square arrangement</p>
-        </div>
-      </div>
     </aside>
 
     <!-- Main content -->
@@ -677,72 +1098,75 @@
           <div class="core-num-card birth">
             <div class="core-num-value" id="birth-num"></div>
             <div class="core-num-meta">
-              <div class="core-num-label">Birth Number</div>
+              <div class="core-num-label">Moolank</div>
               <strong id="birth-num-name"></strong>
               <span>Day of birth reduced</span>
+              <span id="birth-angel" class="angel-badge" style="display:none"></span>
             </div>
           </div>
           <div class="core-num-card destiny">
             <div class="core-num-value" id="destiny-num"></div>
             <div class="core-num-meta">
-              <div class="core-num-label">Destiny Number</div>
+              <div class="core-num-label">Bhagyank</div>
               <strong id="destiny-num-name"></strong>
-              <span>Full DOB summed &amp; reduced</span>
+              <span id="destiny-num-sub"></span>
+              <span id="destiny-angel" class="angel-badge" style="display:none"></span>
             </div>
           </div>
           <div class="core-num-card name" id="name-num-card" style="display:none">
             <div class="core-num-value" id="name-num"></div>
             <div class="core-num-meta">
-              <div class="core-num-label">Name Number</div>
+              <div class="core-num-label">Naamank</div>
               <strong id="name-num-name"></strong>
               <span id="name-num-sub">Chaldean numerology</span>
-            </div>
-          </div>
-          <div class="core-num-card lifepath">
-            <div class="core-num-value" id="life-path-num"></div>
-            <div class="core-num-meta">
-              <div class="core-num-label">Life Path</div>
-              <strong id="life-path-name"></strong>
-              <div class="life-path-calc" id="life-path-calc"></div>
+              <span id="name-angel" class="angel-badge" style="display:none"></span>
             </div>
           </div>
         </div>
 
-        <div class="result-columns">
-
-          <!-- Column 1: Lo Shu Grid -->
-          <div class="col-left">
-            <div class="card">
-              <h3>Lo Shu Grid</h3>
-              <div class="loshu-grid" id="grid"></div>
-            </div>
+        <!-- Grids + Name Breakdown row -->
+        <div class="grids-breakdown-row">
+          <!-- Lo Shu Grid -->
+          <div class="card">
+            <h3>Lo Shu Grid</h3>
+            <div class="loshu-grid loshu-grid-sm" id="grid"></div>
           </div>
 
-          <!-- Column 2: Vedic Grid -->
-          <div class="col-center">
-            <div class="card">
-              <h3>Vedic Grid</h3>
-              <div class="loshu-grid" id="vedic-grid"></div>
-              <p class="grid-sublabel">3-1-9 / 6-7-5 / 2-8-4 · No century · Single occurrence</p>
-            </div>
+          <!-- Vedic Grid -->
+          <div class="card">
+            <h3>Vedic Grid</h3>
+            <div class="loshu-grid loshu-grid-sm" id="vedic-grid"></div>
           </div>
 
-          <!-- Column 3: Planes + Missing + Frequency -->
-          <div class="col-analysis">
-            <div class="card">
-              <h3>Planes of Existence</h3>
-              <div class="planes-grid" id="planes"></div>
-            </div>
-            <div class="card">
-              <h3>Missing Numbers · Karmic Lessons</h3>
-              <div id="missing-numbers"></div>
-            </div>
-            <div class="card">
-              <h3>Digit Frequency</h3>
-              <div class="freq-bar-list" id="freq-bars"></div>
-            </div>
+          <!-- Name Number breakdown -->
+          <div class="card name-breakdown-card" id="name-breakdown" style="display:none;">
+            <h3>Name Number Breakdown · Chaldean</h3>
+            <div class="name-breakdown-body" id="name-breakdown-body"></div>
           </div>
+        </div>
 
+        <!-- Compound number auspicious check -->
+        <div class="card" id="compound-check" style="display:none; margin-bottom:1.5rem;">
+          <h3 id="compound-check-title">Compound Number · Auspicious Check</h3>
+          <div class="compound-check-rows" id="compound-check-body"></div>
+        </div>
+
+        <!-- BN–DN Relationship -->
+        <div class="card" id="bn-dn-card" style="margin-bottom:1.5rem;">
+          <h3>Moolank &amp; Bhagyank · Planetary Relationship</h3>
+          <div class="bn-dn-body" id="bn-dn-body"></div>
+        </div>
+
+        <!-- BN–NN Relationship (shown only when name entered) -->
+        <div class="card" id="bn-nn-card" style="display:none; margin-bottom:1.5rem;">
+          <h3>Naamank &amp; Moolank · Compatibility Check</h3>
+          <div class="bn-dn-body" id="bn-nn-body"></div>
+        </div>
+
+        <!-- DN–NN Relationship (shown only when name entered) -->
+        <div class="card" id="dn-nn-card" style="display:none; margin-bottom:1.5rem;">
+          <h3>Naamank &amp; Bhagyank · Compatibility Check</h3>
+          <div class="bn-dn-body" id="dn-nn-body"></div>
         </div>
 
         <!-- Full-width Yutis row -->
@@ -757,14 +1181,121 @@
   </div>
 
   <script>
-    // Set max date to today
-    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+    // Set max date to today and pre-fill defaults
+    const _today = new Date().toISOString().split('T')[0];
+    document.getElementById('dob').max = _today;
+    document.getElementById('dob').value = _today;
+    document.getElementById('name').value = 'John Smith';
+
+    function setTheme(t) {
+      document.body.classList.toggle('light-theme', t === 'light');
+      document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
+      document.getElementById('btn-light').classList.toggle('active', t === 'light');
+    }
+    // Default: dark active
+    document.getElementById('btn-dark').classList.add('active');
 
     // Lo Shu Grid layout: position index 0-8 maps to numbers displayed
     // Grid:  4 9 2
     //        3 5 7
     //        8 1 6
     const GRID_LAYOUT = [4, 9, 2, 3, 5, 7, 8, 1, 6];
+
+    const MOOLANK_PLANETS = {
+      1:'Sun (Surya)', 2:'Moon (Chandra)', 3:'Jupiter (Guru)',
+      4:'Rahu',        5:'Mercury (Budh)', 6:'Venus (Shukra)',
+      7:'Ketu',        8:'Saturn (Shani)', 9:'Mars (Mangal)'
+    };
+
+    // Friendship table: for each Moolank (BN), which Bhagyank (DN) values are Friend/Neutral/Enemy
+    const MOOLANK_TABLE = {
+      1: { friend:[1,2,3,5,6,9], neutral:[4,7],       enemy:[8] },
+      2: { friend:[1,2,3,5],     neutral:[6,7],       enemy:[4,8,9] },
+      3: { friend:[1,2,3,5,7],   neutral:[4,8,9],     enemy:[6] },
+      4: { friend:[1,5,6,7,8],   neutral:[3,4],       enemy:[2,9] },
+      5: { friend:[1,2,3,5,6],   neutral:[4,7,8,9],   enemy:[] },
+      6: { friend:[1,4,5,6,7],   neutral:[2,8,9],     enemy:[3] },
+      7: { friend:[1,3,4,5,6],   neutral:[2,7,8,9],   enemy:[] },
+      8: { friend:[3,4,5,6,7,8], neutral:[9],         enemy:[1,2] },
+      9: { friend:[1,3,5],       neutral:[6,7,8,9],   enemy:[2,4] },
+    };
+
+    // Namank (Naamank) friendship chart — keyed by Naamank value
+    const NAMANK_TABLE = {
+      1: { friend:[1,2,3,4,5,7,9], neutral:[], enemy:[6,8] },
+      2: { friend:[1,2,3,4,7,8],   neutral:[], enemy:[5,6] },
+      3: { friend:[1,2,3,5,6,8,9], neutral:[], enemy:[4,7] },
+      4: { friend:[1,2,5,7,9],     neutral:[], enemy:[3,4,6,8] },
+      5: { friend:[1,3,4,5,6,7,8,9], neutral:[], enemy:[2] },
+      6: { friend:[3,5,8,9],       neutral:[], enemy:[1,2,4,6] },
+      7: { friend:[1,2,4,5],       neutral:[], enemy:[3,6,7,8,9] },
+      8: { friend:[2,3,5,6],       neutral:[], enemy:[1,4,7,8,9] },
+      9: { friend:[1,2,3,4,5,6],   neutral:[], enemy:[7,8,9] },
+    };
+
+    function getBnDnRelation(bn, dn, table) {
+      table = table || MOOLANK_TABLE;
+      const bnKey = bn > 9 ? bn % 9 || 9 : bn;
+      const dnKey = dn > 9 ? dn % 9 || 9 : dn;
+      const row = table[bnKey];
+      if (!row) return 'unknown';
+      if (row.friend.includes(dnKey))  return 'friend';
+      if (row.neutral.includes(dnKey)) return 'neutral';
+      if (row.enemy.includes(dnKey))   return 'enemy';
+      return 'unknown';
+    }
+
+    function renderBnDnCard(bn, dn) {
+      renderRelCard(bn, 'Moolank (BN)', dn, 'Bhagyank (DN)', 'bn-dn-body', MOOLANK_TABLE);
+    }
+
+    function renderRelCard(n1, label1, n2, label2, bodyId, table) {
+      table = table || MOOLANK_TABLE;
+      const k1 = n1 > 9 ? n1 % 9 || 9 : n1;
+      const k2 = n2 > 9 ? n2 % 9 || 9 : n2;
+      const relation = getBnDnRelation(n1, n2, table);
+      const relLabel = relation === 'friend' ? 'Friend' : relation === 'neutral' ? 'Neutral' : relation === 'enemy' ? 'Enemy' : '—';
+      const hints = { friend:'Harmonious energies — supports growth & alignment.', neutral:'Mixed energies — manageable with awareness.', enemy:'Conflicting energies — requires conscious effort & remedies.' };
+
+      const row = table[k1] || { friend:[], neutral:[], enemy:[] };
+      const allRows = [1,2,3,4,5,6,7,8,9].map(n => {
+        const cat = row.friend.includes(n) ? 'friend' : row.neutral.includes(n) ? 'neutral' : row.enemy.includes(n) ? 'enemy' : '';
+        const isHighlight = n === k2;
+        return `<tr${isHighlight ? ' class="dn-highlight"' : ''}>
+          <td>${n}</td>
+          <td>${MOOLANK_PLANETS[n] || ''}</td>
+          <td class="cat-${cat}">${cat ? cat.charAt(0).toUpperCase()+cat.slice(1) : '—'}</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById(bodyId).innerHTML = `
+        <div class="bn-dn-num-block bn-block">
+          <div class="bdn-val">${n1}</div>
+          <div class="bdn-meta">
+            <div class="bdn-label">${label1}</div>
+            <div class="bdn-planet">${MOOLANK_PLANETS[k1] || ''}</div>
+          </div>
+        </div>
+        <span class="bn-dn-arrow">↔</span>
+        <div class="bn-dn-relation">
+          <span class="bn-dn-badge ${relation}">${relLabel}</span>
+          <span class="bn-dn-hint">${hints[relation] || ''}</span>
+        </div>
+        <span class="bn-dn-arrow">↔</span>
+        <div class="bn-dn-num-block dn-block">
+          <div class="bdn-val">${n2}</div>
+          <div class="bdn-meta">
+            <div class="bdn-label">${label2}</div>
+            <div class="bdn-planet">${MOOLANK_PLANETS[k2] || ''}</div>
+          </div>
+        </div>
+        <div class="bn-dn-table-wrap">
+          <table class="bn-dn-row-table">
+            <thead><tr><th>#</th><th>Planet</th><th>Relation to ${label1.split(' ')[0]} ${n1}</th></tr></thead>
+            <tbody>${allRows}</tbody>
+          </table>
+        </div>`;
+    }
 
     // Chaldean letter-to-number map (9 is sacred — not assigned)
     const CHALDEAN = {
@@ -778,11 +1309,207 @@
       f:8,p:8
     };
 
-    function calcNameNumber(name) {
+    // Pythagorean letter-to-number map (1–9 assigned sequentially)
+    const PYTHAGOREAN = {
+      a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,
+      j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,
+      s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8
+    };
+
+    // Compound numbers 10–52 that are auspicious (rest are inauspicious)
+    const COMPOUND_AUSPICIOUS = new Set([10,13,17,19,20,21,23,24,25,27,30,31,32,33,34,36,37,39,40,41,42,45,46,48,49,50,51]);
+    const COMPOUND_DATA = {
+      10: { keyword: 'Wheel of Fortune',              meaning: 'Honour, faith, self-confidence, rise and fall. Plans likely to be carried out.' },
+      11: { keyword: 'Hidden Dangers',                meaning: 'Trial, treachery, a Clenched Hand, a Lion Muzzled. Master Number — do not change.' },
+      12: { keyword: 'The Sacrifice / Victim',        meaning: 'Suffering, anxiety of mind. Being sacrificed for plans or intrigues of others.' },
+      13: { keyword: 'Transformation / Rebirth',      meaning: 'Change of plans, upheaval, power and dominion if understood rightly.' },
+      14: { keyword: 'Movement, Change, Trade',       meaning: 'Fortunate for money/business but carries risk and danger from natural forces.' },
+      15: { keyword: 'Magic & Mystery',               meaning: 'Eloquence, gifts of music and art. Fortunate for obtaining money and favours.' },
+      16: { keyword: 'Tower Struck by Lightning',     meaning: 'Strange fatality, danger of accidents and defeat of plans. Warning sign.' },
+      17: { keyword: 'Star of the Magi',              meaning: 'Highly spiritual — Peace and Love. Number of immortality. Rises above trials.' },
+      18: { keyword: 'Material Conflicts',            meaning: 'Deception, emotional struggles, bitter quarrels, danger from elements.' },
+      19: { keyword: 'Prince of Heaven / Sun',        meaning: 'Extremely favourable. Happiness, success, esteem, honour.' },
+      20: { keyword: 'Judgement / Awakening',         meaning: 'New purpose, new plans. Delays conquered through spiritual development.' },
+      21: { keyword: 'Advancement',                   meaning: 'Success after struggle, honours, elevation, victory after long fight.' },
+      22: { keyword: 'Fool / Illusion',               meaning: 'Good man blinded by folly of others. Dreamer who awakens in danger. Master Number.' },
+      23: { keyword: 'Royal Star of the Lion',        meaning: 'Help from superiors, protection from high places. Most fortunate number.' },
+      24: { keyword: 'Assistance from Powerful People', meaning: 'Gain through love, association with rank and position.' },
+      25: { keyword: 'Wisdom through Experience',    meaning: 'Strength gained through observation and trials in earlier life.' },
+      26: { keyword: 'Warning — Partnerships',       meaning: 'Disasters by association, ruin by bad speculations and bad advice.' },
+      27: { keyword: 'Authority, Power, Command',     meaning: 'The Sceptre. Reward from productive intellect. Carry out own ideas.' },
+      28: { keyword: 'Loss through Trust',            meaning: 'Great promise taken away. Opposition, competition, legal danger.' },
+      29: { keyword: 'Deception, Unreliable Friends', meaning: 'Uncertainties, treachery, trials, unexpected dangers.' },
+      30: { keyword: 'Thought & Intellectual Expression', meaning: 'Mental superiority. Depends entirely on mental outlook of person.' },
+      31: { keyword: 'Independent Thinker',           meaning: 'Self-contained, unconventional, lonely. Not materially fortunate.' },
+      32: { keyword: 'Communication, Public Influence', meaning: 'Magical power. Fortunate if person holds to own judgement.' },
+      33: { keyword: 'Same family as 24',             meaning: 'Assistance from powerful people. Master Number — do not change.' },
+      34: { keyword: 'Same family as 25',             meaning: 'Wisdom through experience.' },
+      35: { keyword: 'Same family as 26',             meaning: 'Warning regarding partnerships and associations.' },
+      36: { keyword: 'Same family as 27',             meaning: 'Authority, power, command.' },
+      37: { keyword: 'Strong Friendships & Partnerships', meaning: 'Good and fortunate in love and all partnerships.' },
+      38: { keyword: 'Same family as 29',             meaning: 'Deception, unreliable friends.' },
+      39: { keyword: 'Same family as 30',             meaning: 'Thought and intellectual expression.' },
+      40: { keyword: 'Same family as 31',             meaning: 'Independent thinker, unconventional.' },
+      41: { keyword: 'Same family as 32',             meaning: 'Communication, public influence.' },
+      42: { keyword: 'Same family as 24',             meaning: 'Assistance from powerful people.' },
+      43: { keyword: 'Conflict, Upheaval, Revolution', meaning: 'Strife, failure, prevention. Unfortunate.' },
+      44: { keyword: 'Same family as 26',             meaning: 'Warning regarding partnerships.' },
+      45: { keyword: 'Same family as 27',             meaning: 'Authority, power, command.' },
+      46: { keyword: 'Same family as 37',             meaning: 'Strong friendships and partnerships.' },
+      47: { keyword: 'Same family as 29',             meaning: 'Deception, unreliable friends.' },
+      48: { keyword: 'Same family as 30',             meaning: 'Thought and intellectual expression.' },
+      49: { keyword: 'Same family as 31',             meaning: 'Independent thinker.' },
+      50: { keyword: 'Same family as 32',             meaning: 'Communication, public influence.' },
+      51: { keyword: 'Warrior Vibration',             meaning: 'Leadership and victory. Sudden advancement. Also threatens enemies.' },
+      52: { keyword: 'Same family as 43',             meaning: 'Conflict, upheaval, revolution.' },
+    };
+
+    let currentMethod = 'chaldean';
+    function getNameMap() { return currentMethod === 'pythagorean' ? PYTHAGOREAN : CHALDEAN; }
+    function setMethod(m) {
+      currentMethod = m;
+      document.getElementById('btn-chaldean').classList.toggle('active', m === 'chaldean');
+      document.getElementById('btn-pythagorean').classList.toggle('active', m === 'pythagorean');
+      if (document.getElementById('result').style.display !== 'none') calculate();
+    }
+
+    function calcNameNumber(name, map) {
+      map = map || CHALDEAN;
       const letters = name.toLowerCase().replace(/[^a-z]/g, '').split('');
       if (letters.length === 0) return null;
-      const sum = letters.reduce((acc, ch) => acc + (CHALDEAN[ch] || 0), 0);
-      return { sum, reduced: reduceToSingle(sum, true) };
+      const sum = letters.reduce((acc, ch) => acc + (map[ch] || 0), 0);
+      return { sum, reduced: reduceToSingle(sum, false) };
+    }
+
+    function calcNamePart(word, map) {
+      map = map || CHALDEAN;
+      const letters = word.toLowerCase().replace(/[^a-z]/g, '').split('');
+      const sum = letters.reduce((acc, ch) => acc + (map[ch] || 0), 0);
+      return { letters, sum, reduced: reduceToSingle(sum, true) };
+    }
+
+    function renderNameBreakdown(nameVal, map) {
+      map = map || CHALDEAN;
+      const breakdownEl  = document.getElementById('name-breakdown');
+      const bodyEl       = document.getElementById('name-breakdown-body');
+      const parts        = nameVal.trim().split(/\s+/).filter(Boolean);
+      if (parts.length === 0) { breakdownEl.style.display = 'none'; return; }
+
+      const labels = parts.length === 1
+        ? ['First Name']
+        : parts.length === 2
+          ? ['First Name', 'Surname']
+          : ['First Name', ...Array.from({length: parts.length - 2}, (_, i) => `Middle Name${parts.length > 3 ? ' ' + (i+1) : ''}`), 'Surname'];
+
+      const computed = parts.map(w => calcNamePart(w, map));
+      const totalSum = computed.reduce((a, p) => a + p.sum, 0);
+      const totalReduced = reduceToSingle(totalSum, true);
+
+      let html = computed.map((p, i) => {
+        const chipsHtml = p.letters.map(ch =>
+          `<span class="name-letter-chip"><span class="nl">${ch}</span><span class="nv">${map[ch] || 0}</span></span>`
+        ).join('');
+        const partReduced = reduceToSingle(p.sum, true);
+        const needsReduction = p.sum !== partReduced;
+        return `
+          ${i > 0 ? '<span class="name-breakdown-arrow">+</span>' : ''}
+          <div class="name-part">
+            <div class="name-part-label">${labels[i]}</div>
+            <div class="name-part-word">${parts[i]}</div>
+            <div class="name-part-letters">${chipsHtml}</div>
+            <div class="name-part-sum">
+              <span class="compound-num">${p.sum}</span>
+              ${needsReduction ? `<span class="sum-arrow">→</span><span class="reduced-num">${partReduced}</span>` : ''}
+            </div>
+          </div>`;
+      }).join('');
+
+      // Raw sums added together, then reduced
+      const rawSumParts = computed.map(p => p.sum).join(' + ');
+      html += `
+        <span class="name-breakdown-arrow">=</span>
+        <div class="name-total-box">
+          <div class="ntl">Total</div>
+          <div class="nts">${rawSumParts}</div>
+          <div class="ntv-compound">${totalSum}</div>
+          ${totalSum !== totalReduced ? `<div class="ntv-arrow">→</div><div class="ntv">${totalReduced}</div>` : `<div class="ntv">${totalReduced}</div>`}
+        </div>`;
+
+      bodyEl.innerHTML = html;
+      breakdownEl.style.display = 'block';
+    }
+
+    function renderCompoundCheck(nameVal, map) {
+      map = map || CHALDEAN;
+      const checkCard = document.getElementById('compound-check');
+      const checkBody = document.getElementById('compound-check-body');
+      if (currentMethod === 'pythagorean') { checkCard.style.display = 'none'; return; }
+      document.getElementById('compound-check-title').textContent = `Compound Number · Auspicious Check (Chaldean)`;
+      const parts = nameVal.trim().split(/\s+/).filter(Boolean);
+      if (parts.length === 0) { checkCard.style.display = 'none'; return; }
+
+      const labels = parts.length === 1 ? ['First Name']
+        : parts.length === 2 ? ['First Name', 'Surname']
+        : ['First Name', ...Array.from({length: parts.length - 2}, (_, i) => `Middle Name${parts.length > 3 ? ' ' + (i+1) : ''}`), 'Surname'];
+
+      function compoundMeaning(n) {
+        if (n < 10 || n > 52) return '';
+        const d = COMPOUND_DATA[n];
+        if (!d) return '';
+        return `<div class="ccr-meaning"><strong>${d.keyword}</strong> — ${d.meaning}</div>`;
+      }
+
+      function auspBadge(n) {
+        if (n < 10) return `<span class="ccr-badge outofrange">Single digit</span>`;
+        if (n <= 52) {
+          return COMPOUND_AUSPICIOUS.has(n)
+            ? `<span class="ccr-badge auspicious">✓ Auspicious</span>`
+            : `<span class="ccr-badge inauspicious">✗ Inauspicious</span>`;
+        }
+        // n > 52: subtract 9 until ≤ 52, then build chain down to ≥ 10
+        let start = n;
+        while (start > 52) start -= 9;
+        const chain = [];
+        let x = start;
+        while (x >= 10) { chain.push(x); x -= 9; }
+        const auspCount = chain.filter(v => COMPOUND_AUSPICIOUS.has(v)).length;
+        const total = chain.length;
+        const isAusp = auspCount * 2 >= total;
+        const verdict = isAusp ? 'auspicious' : 'inauspicious';
+        const icon = isAusp ? '✓' : '✗';
+        const label = isAusp ? 'Auspicious' : 'Inauspicious';
+        const badgeHtml = `<span class="ccr-badge ${verdict}">${icon} ${label} (${auspCount}/${total})</span>`;
+        const chips = chain.map((v, i) => {
+          const cls = COMPOUND_AUSPICIOUS.has(v) ? 'ausp' : 'inausp';
+          return (i > 0 ? `<span class="ccr-chain-arrow">→</span>` : '') +
+            `<span class="ccr-chain-num ${cls}">${v}</span>`;
+        }).join('');
+        const chainHtml = `<div class="ccr-chain">${chips}</div>`;
+        return badgeHtml + chainHtml;
+      }
+
+      const computed = parts.map(w => calcNamePart(w, map));
+      const totalSum = computed.reduce((a, p) => a + p.sum, 0);
+      let rows = computed.map((p, i) => `
+        <div class="compound-check-row">
+          <span class="ccr-label">${labels[i]}</span>
+          <span class="ccr-word">${parts[i]}</span>
+          <span class="ccr-num">${p.sum}</span>
+          ${auspBadge(p.sum)}
+          ${compoundMeaning(p.sum)}
+        </div>`).join('');
+
+      rows += `
+        <div class="compound-check-row total-row">
+          <span class="ccr-label">Total</span>
+          <span class="ccr-word">${parts.join(' ')}</span>
+          <span class="ccr-num">${totalSum}</span>
+          ${auspBadge(totalSum)}
+          ${compoundMeaning(totalSum)}
+        </div>`;
+
+      checkBody.innerHTML = rows;
+      checkCard.style.display = 'block';
     }
 
     // Yuti data keyed as 'min-max'
@@ -832,14 +1559,11 @@
       11: 'The Intuitive', 22: 'The Master Builder', 33: 'The Master Teacher'
     };
 
-    const PLANES = [
-      { name: 'Mental Plane',    numbers: [4, 9, 2], desc: 'Top row' },
-      { name: 'Emotional Plane', numbers: [3, 5, 7], desc: 'Middle row' },
-      { name: 'Practical Plane', numbers: [8, 1, 6], desc: 'Bottom row' },
-      { name: 'Thought Plane',   numbers: [4, 3, 8], desc: 'Left column' },
-      { name: 'Will Plane',      numbers: [9, 5, 1], desc: 'Centre column' },
-      { name: 'Action Plane',    numbers: [2, 7, 6], desc: 'Right column' },
-    ];
+    function isAngelNumber(n) {
+      if (n < 11 || n > 99) return false;
+      const s = String(n);
+      return s.length === 2 && s[0] === s[1];
+    }
 
     function reduceToSingle(n, allowMaster = true) {
       if (allowMaster && (n === 11 || n === 22 || n === 33)) return n;
@@ -890,33 +1614,69 @@
       }
 
       // Birth Number (day reduced to 1-9, no master numbers for grid placement)
-      const bn = reduceToSingle(day, true);
+      const bn = reduceToSingle(day, false);
       const bnGrid = reduceToSingle(day, false); // 1–9 only for grid
       if (bnGrid >= 1 && bnGrid <= 9) counts[bnGrid]++;
 
       // Destiny Number (all DOB digits summed, reduced to 1-9 for grid)
       const destSum = rawDigits.split('').reduce((a, ch) => a + +ch, 0);
-      const dn = reduceToSingle(destSum, true);
+      const dn = reduceToSingle(destSum, false);
       const dnGrid = reduceToSingle(destSum, false); // 1–9 only for grid
       if (dnGrid >= 1 && dnGrid <= 9) counts[dnGrid]++;
 
-      // Name Number (Chaldean)
+      // Name Number
+      const nameMap = getNameMap();
       const nameVal = document.getElementById('name').value.trim();
-      const nameResult = calcNameNumber(nameVal);
+      const nameResult = calcNameNumber(nameVal, nameMap);
       const nameCard = document.getElementById('name-num-card');
+      const methodLabel = currentMethod === 'pythagorean' ? 'Pythagorean' : 'Chaldean';
       if (nameResult) {
         document.getElementById('name-num').textContent = nameResult.reduced;
         document.getElementById('name-num-name').textContent = LIFE_PATH_NAMES[nameResult.reduced] || '';
-        document.getElementById('name-num-sub').textContent = `Chaldean · sum ${nameResult.sum}`;
+        document.getElementById('name-num-sub').textContent = `${methodLabel} · sum ${nameResult.sum}`;
+        const nameAngel = document.getElementById('name-angel');
+        if (isAngelNumber(nameResult.sum)) { nameAngel.textContent = `✨ Angel Number ${nameResult.sum}`; nameAngel.style.display = 'inline-block'; }
+        else { nameAngel.style.display = 'none'; }
         nameCard.style.display = 'flex';
       } else {
         nameCard.style.display = 'none';
+      }
+      document.querySelector('#name-breakdown h3').textContent = `Name Number Breakdown · ${methodLabel}`;
+      renderNameBreakdown(nameVal, nameMap);
+      renderCompoundCheck(nameVal, nameMap);
+
+      // Moolank–Naamank and Bhagyank–Naamank (only when name given)
+      const bnNnCard = document.getElementById('bn-nn-card');
+      const dnNnCard = document.getElementById('dn-nn-card');
+      if (nameResult) {
+        const nn = nameResult.reduced;
+        // Naamank is the reference point — use NAMANK_TABLE keyed by nn
+        renderRelCard(nn, 'Naamank (NN)', bn, 'Moolank (BN)', 'bn-nn-body', NAMANK_TABLE);
+        renderRelCard(nn, 'Naamank (NN)', dn, 'Bhagyank (DN)', 'dn-nn-body', NAMANK_TABLE);
+        bnNnCard.style.display = 'block';
+        dnNnCard.style.display = 'block';
+      } else {
+        bnNnCard.style.display = 'none';
+        dnNnCard.style.display = 'none';
       }
 
       document.getElementById('birth-num').textContent = bn;
       document.getElementById('birth-num-name').textContent = LIFE_PATH_NAMES[bn] || '';
       document.getElementById('destiny-num').textContent = dn;
       document.getElementById('destiny-num-name').textContent = LIFE_PATH_NAMES[dn] || '';
+      const destDigits = rawDigits.split('').join('+');
+      document.getElementById('destiny-num-sub').textContent =
+        `${destDigits} = ${destSum}${destSum !== dn ? ' → ' + dn : ''}`;
+
+      // Angel number badges for Moolank and Bhagyank
+      const birthAngel = document.getElementById('birth-angel');
+      if (isAngelNumber(day)) { birthAngel.textContent = `✨ Angel Number ${day}`; birthAngel.style.display = 'inline-block'; }
+      else { birthAngel.style.display = 'none'; }
+      const destAngel = document.getElementById('destiny-angel');
+      if (isAngelNumber(destSum)) { destAngel.textContent = `✨ Angel Number ${destSum}`; destAngel.style.display = 'inline-block'; }
+      else { destAngel.style.display = 'none'; }
+
+      renderBnDnCard(bn, dn);
 
       // Hide empty state, show result
       document.getElementById('empty-state').style.display = 'none';
@@ -1020,50 +1780,6 @@
 
       // Life path
       const lp = calcLifePath(day, month, year);
-      document.getElementById('life-path-num').textContent  = lp;
-      document.getElementById('life-path-name').textContent = LIFE_PATH_NAMES[lp] || '';
-      document.getElementById('life-path-calc').textContent = formatCalcSteps(day, month, year);
-
-      // Planes
-      const planesEl = document.getElementById('planes');
-      planesEl.innerHTML = '';
-      PLANES.forEach(pl => {
-        const div = document.createElement('div');
-        div.className = 'plane-item';
-        const numsHtml = pl.numbers.map(n =>
-          `<span class="${counts[n] > 0 ? 'present' : 'absent'}">${n}</span>`
-        ).join(' · ');
-        div.innerHTML = `<div class="plane-name">${pl.name}</div>
-                         <div class="plane-nums">${numsHtml}</div>`;
-        planesEl.appendChild(div);
-      });
-
-      // Missing numbers
-      const missing = Object.entries(counts).filter(([,v]) => v === 0).map(([k]) => +k);
-      const missingEl = document.getElementById('missing-numbers');
-      if (missing.length === 0) {
-        missingEl.innerHTML = '<span class="no-missing">No missing numbers — all 1–9 present!</span>';
-      } else {
-        missingEl.innerHTML = `<div class="missing-list">${
-          missing.map(n => `<span class="missing-badge">${n}</span>`).join('')
-        }</div>`;
-      }
-
-      // Digit frequency bars
-      const maxCount = Math.max(...Object.values(counts), 1);
-      const freqEl = document.getElementById('freq-bars');
-      freqEl.innerHTML = '';
-      for (let i = 1; i <= 9; i++) {
-        const pct = Math.round((counts[i] / maxCount) * 100);
-        freqEl.innerHTML += `
-          <div class="freq-row">
-            <span class="freq-num">${i}</span>
-            <div class="freq-bar-track">
-              <div class="freq-bar-fill" style="width:${pct}%"></div>
-            </div>
-            <span class="freq-count">${counts[i]}</span>
-          </div>`;
-      }
 
       // DOB label
       const formatted = new Date(year, month - 1, day)
@@ -1072,6 +1788,9 @@
 
       document.getElementById('result').style.display = 'block';
     }
+
+    // Auto-calculate with default values on load
+    calculate();
   </script>
 
 </body>

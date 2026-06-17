@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compound Numbers · Reference</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #22223a;
+      --accent: #e2b96f;
+      --accent2: #c084fc;
+      --text: #e8e6f0;
+      --text-muted: #9390a8;
+      --border: #2e2e4a;
+      --radius: 14px;
+      --green: #4ade80;
+      --red: #f87171;
+      --green-bg: rgba(74,222,128,0.1);
+      --red-bg: rgba(248,113,113,0.1);
+    }
+    body.light-theme {
+      --bg: #f0ede8;
+      --surface: #ffffff;
+      --surface2: #e8e3db;
+      --accent: #8b5e0a;
+      --accent2: #6d28d9;
+      --text: #1c1408;
+      --text-muted: #6b5a3e;
+      --border: #c9b99a;
+      --green: #166534;
+      --red: #b91c1c;
+      --green-bg: rgba(22,101,52,0.1);
+      --red-bg: rgba(185,28,28,0.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .page-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #005f8e, #0096c7);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .back-btn:hover { opacity: 0.9; }
+
+    .theme-btn-sm {
+      padding: 0.4rem 0.9rem;
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 2.5rem; }
+    .section-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* ── Info box ── */
+    .info-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.7;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .info-box strong { color: var(--text); }
+    .info-box .accent { color: var(--accent); font-weight: 600; }
+
+    /* ── Algorithm steps ── */
+    .steps { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.87rem;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #005f8e, #0096c7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+    .step-body { color: var(--text-muted); line-height: 1.6; }
+    .step-body strong { color: var(--text); }
+
+    /* ── Example box ── */
+    .example-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .example-box strong { color: var(--accent); }
+    .chain-demo {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+    .chain-chip {
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border: 1px solid;
+    }
+    .chain-chip.ausp  { color: var(--green); background: var(--green-bg); border-color: var(--green); }
+    .chain-chip.inausp{ color: var(--red);   background: var(--red-bg);   border-color: var(--red); }
+    .chain-arrow { color: var(--text-muted); font-size: 0.8rem; }
+
+    /* ── Number grid ── */
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.75rem;
+    }
+    .num-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: border-color 0.2s;
+    }
+    .num-card.ausp  { border-left: 4px solid var(--green); }
+    .num-card.inausp{ border-left: 4px solid var(--red);   }
+    .num-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .num-card .n {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .num-card.ausp  .n { color: var(--green); }
+    .num-card.inausp .n { color: var(--red);  }
+    .num-card .verdict {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+    .num-card.ausp  .verdict { color: var(--green); background: var(--green-bg); border-color: var(--green); }
+    .num-card.inausp .verdict { color: var(--red);   background: var(--red-bg);   border-color: var(--red); }
+    .num-card .keyword {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .num-card .meaning {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .dot.ausp  { background: var(--green); }
+    .dot.inausp{ background: var(--red);   }
+
+    @media (max-width: 600px) {
+      .num-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="top-bar">
+      <a class="back-btn" href="index.html">← Back to App</a>
+      <button class="theme-btn-sm" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+
+    <h1>Compound Numbers · Reference</h1>
+    <p class="subtitle">
+      In Chaldean numerology, compound numbers (10–52) carry distinct vibrational meanings beyond their single-digit root.
+      Each is classified as <strong>Auspicious</strong> or <strong>Inauspicious</strong>.
+      For names producing numbers above 52, a chain-reduction method determines the verdict.
+    </p>
+
+    <!-- What is a compound number -->
+    <div class="section">
+      <div class="section-title">What is a Compound Number?</div>
+      <div class="info-box">
+        When the Chaldean sum of your name exceeds 9, it becomes a <strong>compound number</strong>.
+        Unlike in Pythagorean numerology where only the reduced single digit matters, Chaldean numerology
+        treats each two-digit (or higher) sum as having its own energy.<br /><br />
+        Numbers <span class="accent">1–9</span> are single digits — no compound reading applies.<br />
+        Numbers <span class="accent">10–52</span> each have a defined auspicious or inauspicious quality.<br />
+        Numbers <span class="accent">above 52</span> are handled via the chain-reduction algorithm below.
+      </div>
+    </div>
+
+    <!-- Above 52 algorithm -->
+    <div class="section">
+      <div class="section-title">How to Calculate for Numbers Above 52</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Subtract 9 repeatedly</strong> from the compound number until you reach a value ≤ 52.
+            This is your <strong>entry point</strong> into the known compound range.
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Build a chain</strong>: starting from the entry point, keep subtracting 9 until you go below 10.
+            Collect every value ≥ 10 in this chain.
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Check each chain number</strong> against the auspicious set.
+            Count how many are auspicious vs inauspicious.
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Majority vote</strong>: if auspicious count ≥ half the chain length, the overall verdict is
+            <strong style="color:var(--green)">Auspicious</strong>; otherwise <strong style="color:var(--red)">Inauspicious</strong>.
+          </div>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <strong>Example — Name sum = 61</strong><br />
+        Step 1: 61 − 9 = 52 &nbsp;(≤ 52, entry point reached)<br />
+        Step 2: Chain from 52 → 52, 43, 34, 25, 16 &nbsp;(stop before 10)<br />
+        Step 3: Check each —
+        <div class="chain-demo">
+          <span class="chain-chip ausp">52 ✓</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip inausp">43 ✗</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip ausp">34 ✓</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip ausp">25 ✓</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip ausp">16 ✗</span>
+        </div>
+        Step 4: 3 auspicious out of 5 → majority → <strong style="color:var(--green)">✓ Auspicious (3/5)</strong>
+      </div>
+
+      <div class="example-box">
+        <strong>Example — Name sum = 74</strong><br />
+        Step 1: 74 − 9 = 65, 65 − 9 = 56, 56 − 9 = 47 &nbsp;(≤ 52, entry point)<br />
+        Step 2: Chain from 47 → 47, 38, 29, 20, 11<br />
+        Step 3: Check each —
+        <div class="chain-demo">
+          <span class="chain-chip inausp">47 ✗</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip inausp">38 ✗</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip inausp">29 ✗</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip ausp">20 ✓</span>
+          <span class="chain-arrow">→</span>
+          <span class="chain-chip ausp">11 ✗</span>
+        </div>
+        Step 4: 2 auspicious out of 5 → minority → <strong style="color:var(--red)">✗ Inauspicious (2/5)</strong>
+      </div>
+    </div>
+
+    <!-- Compound number table 10-52 -->
+    <div class="section">
+      <div class="section-title">Compound Numbers 10–52 · Auspicious / Inauspicious</div>
+      <div class="legend">
+        <div class="legend-item"><div class="dot ausp"></div> Auspicious</div>
+        <div class="legend-item"><div class="dot inausp"></div> Inauspicious</div>
+      </div>
+      <div class="num-grid" id="num-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const COMPOUND_AUSPICIOUS = new Set([10,13,17,19,20,21,23,24,25,27,30,31,32,33,34,36,37,39,40,41,42,45,46,48,49,50,51]);
+    const COMPOUND_DATA = {
+      10: { keyword: 'Wheel of Fortune',                 meaning: 'Honour, faith, self-confidence, rise and fall. Plans likely to be carried out.' },
+      11: { keyword: 'Hidden Dangers',                   meaning: 'Trial, treachery, a Clenched Hand, a Lion Muzzled. Master Number — do not change.' },
+      12: { keyword: 'The Sacrifice / Victim',           meaning: 'Suffering, anxiety of mind. Being sacrificed for plans or intrigues of others.' },
+      13: { keyword: 'Transformation / Rebirth',         meaning: 'Change of plans, upheaval, power and dominion if understood rightly.' },
+      14: { keyword: 'Movement, Change, Trade',          meaning: 'Fortunate for money/business but carries risk and danger from natural forces.' },
+      15: { keyword: 'Magic & Mystery',                  meaning: 'Eloquence, gifts of music and art. Fortunate for obtaining money and favours.' },
+      16: { keyword: 'Tower Struck by Lightning',        meaning: 'Strange fatality, danger of accidents and defeat of plans. Warning sign.' },
+      17: { keyword: 'Star of the Magi',                 meaning: 'Highly spiritual — Peace and Love. Number of immortality. Rises above trials.' },
+      18: { keyword: 'Material Conflicts',               meaning: 'Deception, emotional struggles, bitter quarrels, danger from elements.' },
+      19: { keyword: 'Prince of Heaven / Sun',           meaning: 'Extremely favourable. Happiness, success, esteem, honour.' },
+      20: { keyword: 'Judgement / Awakening',            meaning: 'New purpose, new plans. Delays conquered through spiritual development.' },
+      21: { keyword: 'Advancement',                      meaning: 'Success after struggle, honours, elevation, victory after long fight.' },
+      22: { keyword: 'Fool / Illusion',                  meaning: 'Good man blinded by folly of others. Dreamer who awakens in danger. Master Number.' },
+      23: { keyword: 'Royal Star of the Lion',           meaning: 'Help from superiors, protection from high places. Most fortunate number.' },
+      24: { keyword: 'Assistance from Powerful People',  meaning: 'Gain through love, association with rank and position.' },
+      25: { keyword: 'Wisdom through Experience',        meaning: 'Strength gained through observation and trials in earlier life.' },
+      26: { keyword: 'Warning — Partnerships',           meaning: 'Disasters by association, ruin by bad speculations and bad advice.' },
+      27: { keyword: 'Authority, Power, Command',        meaning: 'The Sceptre. Reward from productive intellect. Carry out own ideas.' },
+      28: { keyword: 'Loss through Trust',               meaning: 'Great promise taken away. Opposition, competition, legal danger.' },
+      29: { keyword: 'Deception, Unreliable Friends',    meaning: 'Uncertainties, treachery, trials, unexpected dangers.' },
+      30: { keyword: 'Thought & Intellectual Expression',meaning: 'Mental superiority. Depends entirely on mental outlook of person.' },
+      31: { keyword: 'Independent Thinker',              meaning: 'Self-contained, unconventional, lonely. Not materially fortunate.' },
+      32: { keyword: 'Communication, Public Influence',  meaning: 'Magical power. Fortunate if person holds to own judgement.' },
+      33: { keyword: 'Same family as 24',                meaning: 'Assistance from powerful people. Master Number — do not change.' },
+      34: { keyword: 'Same family as 25',                meaning: 'Wisdom through experience.' },
+      35: { keyword: 'Same family as 26',                meaning: 'Warning regarding partnerships and associations.' },
+      36: { keyword: 'Same family as 27',                meaning: 'Authority, power, command.' },
+      37: { keyword: 'Strong Friendships & Partnerships',meaning: 'Good and fortunate in love and all partnerships.' },
+      38: { keyword: 'Same family as 29',                meaning: 'Deception, unreliable friends.' },
+      39: { keyword: 'Same family as 30',                meaning: 'Thought and intellectual expression.' },
+      40: { keyword: 'Same family as 31',                meaning: 'Independent thinker, unconventional.' },
+      41: { keyword: 'Same family as 32',                meaning: 'Communication, public influence.' },
+      42: { keyword: 'Same family as 24',                meaning: 'Assistance from powerful people.' },
+      43: { keyword: 'Conflict, Upheaval, Revolution',   meaning: 'Strife, failure, prevention. Unfortunate.' },
+      44: { keyword: 'Same family as 26',                meaning: 'Warning regarding partnerships.' },
+      45: { keyword: 'Same family as 27',                meaning: 'Authority, power, command.' },
+      46: { keyword: 'Same family as 37',                meaning: 'Strong friendships and partnerships.' },
+      47: { keyword: 'Same family as 29',                meaning: 'Deception, unreliable friends.' },
+      48: { keyword: 'Same family as 30',                meaning: 'Thought and intellectual expression.' },
+      49: { keyword: 'Same family as 31',                meaning: 'Independent thinker.' },
+      50: { keyword: 'Same family as 32',                meaning: 'Communication, public influence.' },
+      51: { keyword: 'Warrior Vibration',                meaning: 'Leadership and victory. Sudden advancement. Also threatens enemies.' },
+      52: { keyword: 'Same family as 43',                meaning: 'Conflict, upheaval, revolution.' },
+    };
+
+    const grid = document.getElementById('num-grid');
+    for (let n = 10; n <= 52; n++) {
+      const isAusp = COMPOUND_AUSPICIOUS.has(n);
+      const cls = isAusp ? 'ausp' : 'inausp';
+      const icon = isAusp ? '✓' : '✗';
+      const label = isAusp ? 'Auspicious' : 'Inauspicious';
+      const d = COMPOUND_DATA[n];
+      const card = document.createElement('div');
+      card.className = `num-card ${cls}`;
+      card.innerHTML = `
+        <div class="num-card-header">
+          <span class="n">${n}</span>
+          <span class="verdict">${icon} ${label}</span>
+        </div>
+        <div class="keyword">${d.keyword}</div>
+        <div class="meaning">${d.meaning}</div>
+      `;
+      grid.appendChild(card);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+    }
+  </script>
+</body>
+</html>

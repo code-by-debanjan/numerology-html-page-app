@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vedic Yutis · Reference</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #22223a;
+      --accent: #e2b96f;
+      --accent2: #c084fc;
+      --text: #e8e6f0;
+      --text-muted: #9390a8;
+      --border: #2e2e4a;
+      --radius: 14px;
+      --pos-color: #4ade80;
+      --pos-bg: rgba(74,222,128,0.09);
+      --pos-border: rgba(74,222,128,0.3);
+      --vir-color: #f87171;
+      --vir-bg: rgba(248,113,113,0.09);
+      --vir-border: rgba(248,113,113,0.3);
+      --con-color: #facc15;
+      --con-bg: rgba(250,204,21,0.09);
+      --con-border: rgba(250,204,21,0.3);
+      --neu-color: #94a3b8;
+      --neu-bg: rgba(148,163,184,0.09);
+      --neu-border: rgba(148,163,184,0.3);
+    }
+    body.light-theme {
+      --bg: #f0ede8;
+      --surface: #ffffff;
+      --surface2: #e8e3db;
+      --accent: #8b5e0a;
+      --accent2: #6d28d9;
+      --text: #1c1408;
+      --text-muted: #6b5a3e;
+      --border: #c9b99a;
+      --pos-color: #166534;
+      --pos-bg: rgba(22,101,52,0.08);
+      --pos-border: rgba(22,101,52,0.3);
+      --vir-color: #b91c1c;
+      --vir-bg: rgba(185,28,28,0.08);
+      --vir-border: rgba(185,28,28,0.3);
+      --con-color: #92400e;
+      --con-bg: rgba(146,64,14,0.08);
+      --con-border: rgba(146,64,14,0.3);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .page-wrap { max-width: 1100px; margin: 0 auto; }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #005f8e, #0096c7);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .back-btn:hover { opacity: 0.9; }
+    .theme-btn-sm {
+      padding: 0.4rem 0.9rem;
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* ── Filters ── */
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+    }
+    .filter-btn {
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: linear-gradient(135deg,#005f8e,#0096c7); color: #fff; border-color: transparent; }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dot.positive    { background: var(--pos-color); }
+    .legend-dot.virodhi     { background: var(--vir-color); }
+    .legend-dot.conditional { background: var(--con-color); }
+    .legend-dot.neutral     { background: var(--neu-color); }
+
+    /* ── Yuti grid ── */
+    .yuti-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .yuti-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      transition: border-color 0.2s;
+    }
+    .yuti-card.positive    { border-color: var(--pos-border); }
+    .yuti-card.virodhi     { border-color: var(--vir-border); }
+    .yuti-card.conditional { border-color: var(--con-border); }
+    .yuti-card.neutral     { border-color: var(--neu-border); }
+    .yuti-card[style*="none"] { display: none !important; }
+
+    .yuti-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .yuti-nums {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .yuti-badge {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+    .yuti-badge.positive    { color: var(--pos-color); background: var(--pos-bg); border-color: var(--pos-border); }
+    .yuti-badge.virodhi     { color: var(--vir-color); background: var(--vir-bg); border-color: var(--vir-border); }
+    .yuti-badge.conditional { color: var(--con-color); background: var(--con-bg); border-color: var(--con-border); }
+    .yuti-badge.neutral     { color: var(--neu-color); background: var(--neu-bg); border-color: var(--neu-border); }
+
+    .yuti-planet {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent2);
+    }
+    .yuti-effects {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .yuti-upaay {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 0.4rem;
+      border-top: 1px solid var(--border);
+    }
+    .upaay-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .count-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .count-label span { color: var(--accent); font-weight: 700; }
+
+    @media (max-width: 600px) {
+      .yuti-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="top-bar">
+      <a class="back-btn" href="index.html">← Back to App</a>
+      <button class="theme-btn-sm" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+
+    <h1>Vedic Yutis · Reference</h1>
+    <p class="subtitle">
+      A <strong>Yuti</strong> (conjunction) is formed when two numbers are adjacent in the Vedic Lo Shu grid.
+      Each pair of planets carries a specific energy — positive, virodhi (conflicting), conditional, or neutral.
+    </p>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot positive"></div> Positive — harmonious energy</div>
+      <div class="legend-item"><div class="legend-dot virodhi"></div> Virodhi — conflicting energy</div>
+      <div class="legend-item"><div class="legend-dot conditional"></div> Conditional — context-dependent</div>
+      <div class="legend-item"><div class="legend-dot neutral"></div> Neutral — mild or balanced</div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filter('all', this)">All</button>
+      <button class="filter-btn" onclick="filter('positive', this)">✓ Positive</button>
+      <button class="filter-btn" onclick="filter('virodhi', this)">✗ Virodhi</button>
+      <button class="filter-btn" onclick="filter('conditional', this)">~ Conditional</button>
+      <button class="filter-btn" onclick="filter('neutral', this)">· Neutral</button>
+    </div>
+
+    <div class="count-label">Showing <span id="count-label">36</span> of 36 Yutis</div>
+
+    <div class="yuti-grid" id="yuti-grid"></div>
+  </div>
+
+  <script>
+    const YUTI_DATA = {
+      '1-2': { planet:'Surya–Chandra',      cls:'positive',    effects:'Leadership + emotional intelligence, public connection.', upaay:'' },
+      '1-3': { planet:'Surya–Guru',         cls:'positive',    effects:'High education. Respect in society. Strong leadership with wisdom. Success in govt, legal, teaching, consulting. Father support. Self-made success.', upaay:'' },
+      '1-4': { planet:'Surya–Rahu',         cls:'virodhi',     effects:'Identity confusion, authority clashes, too much fire power, impatient.', upaay:'Aditya Hridayam, Hanuman worship.' },
+      '1-5': { planet:'Surya–Budh',         cls:'positive',    effects:'Sharp intellect. Communication excellence. Business success. Marketing, media, consulting strength. Quick decision making.', upaay:'' },
+      '1-6': { planet:'Surya–Shukra',       cls:'virodhi',     effects:'Ego clashes in relationships. Attraction but instability. Financial fluctuations due to decisions.', upaay:'Chant Om Shukraya Namah. Offer white sweets Friday. Practice humility. Strengthen Sun routine.' },
+      '1-7': { planet:'Surya–Ketu',         cls:'neutral',     effects:'Spiritual leadership, detachment, secretive.', upaay:'Grounding, Surya Namaskar.' },
+      '1-8': { planet:'Shani–Surya',        cls:'virodhi',     effects:'Problems in life. Apamaan yog (defamation). Authority conflicts. Delays in govt matters. Restlessness.', upaay:'Practice discipline & humility. Offer water to Sun daily. Hanuman Chalisa. Light sesame oil diya on Saturdays.' },
+      '1-9': { planet:'Surya–Mangal',       cls:'positive',    effects:'Strong leadership. Fearless decision maker. Entrepreneur mindset. Success in business, surgery, administration. Action-oriented personality.', upaay:'' },
+      '2-3': { planet:'Chandra–Guru',       cls:'positive',    effects:'Wisdom + emotional balance. Spiritual growth. Teaching ability. Respect in family and society. Stable mindset.', upaay:'' },
+      '2-4': { planet:'Chandra–Rahu',       cls:'virodhi',     effects:'Family disputes. Accident yog. Eye/heart concerns. Wrong company/friends.', upaay:'Donate white items on Monday. Om Namah Shivaya. Devi Kavacham. Emotional discipline.' },
+      '2-5': { planet:'Chandra–Budh',       cls:'positive',    effects:'Emotional intelligence + logic. Excellent communication. Writing, counseling, teaching success.', upaay:'' },
+      '2-6': { planet:'Chandra–Shukra',     cls:'positive',    effects:'Emotional intelligence. Strong relationships. Comfort, luxury, artistic inclination. Family-oriented success.', upaay:'' },
+      '2-7': { planet:'Chandra–Ketu',       cls:'virodhi',     effects:'Overthinking. Emotional confusion. Isolation. Trust issues.', upaay:'Om Som Somaya Namah. Moon strengthening. Meditation near water. Grounding practices.' },
+      '2-8': { planet:'Chandra–Shani',      cls:'virodhi',     effects:'Depression tendencies. Emotional suppression. Financial delays. Betrayals.', upaay:'Mahamrityunjaya Mantra. Donate milk Mondays. Serve elderly. Stabilize routine.' },
+      '2-9': { planet:'Chandra–Mangal',     cls:'conditional', effects:'Emotional courage, impulsiveness, actions based on emotions, not confident to dare.', upaay:'Donate milk Monday, Om Nama Shivay.' },
+      '3-4': { planet:'Guru–Rahu',          cls:'virodhi',     effects:'Guru Chandal yog — wrong judgement, misleading guidance.', upaay:'Guru worship.' },
+      '3-5': { planet:'Guru–Budh',          cls:'positive',    effects:'Knowledge + communication mastery. Teacher, speaker, advisor, strategist. Strong analytical mind. Success in education & training fields.', upaay:'' },
+      '3-6': { planet:'Guru–Shukra',        cls:'conditional', effects:'Over-indulgence risk but also education + luxury balance. Dharmik nature. Growth after marriage. Creative intelligence.', upaay:'Guru Pooja. Avoid excess luxury. Om Gurave Namah. Discipline practices.' },
+      '3-7': { planet:'Guru–Ketu',          cls:'positive',    effects:'Spiritual wisdom. Guru kripa. Strong intuition. Success in teaching, healing, spiritual guidance.', upaay:'' },
+      '3-8': { planet:'Guru–Shani',         cls:'virodhi',     effects:'Knowledge but delayed results. Career stagnation despite effort. Slow but guaranteed success. Strong in structured careers, judiciary.', upaay:'Donate books. Vishnu Sahasranama. Patience sadhana. Help students.' },
+      '3-9': { planet:'Guru–Mangal',        cls:'virodhi',     effects:'High effort, low returns. Difficulty completing education. Political mindset but instability.', upaay:'Guru Pooja. Gratitude practice. Hanuman Chalisa. Guidance from mentor required.' },
+      '4-5': { planet:'Rahu–Budh',          cls:'conditional', effects:'Innovation, digital success, unconventional thinking. Growth in technology, marketing, startups.', upaay:'' },
+      '4-6': { planet:'Rahu–Shukra',        cls:'virodhi',     effects:'Relationship instability. Love-marriage complications. Financial impulsiveness. Glamour and mass appeal if balanced.', upaay:'Durga Saptashati. Offer white flowers Friday. Avoid shortcuts.' },
+      '4-7': { planet:'Rahu–Ketu',          cls:'virodhi',     effects:'Confusion, start-stop cycles, instability. Ups and downs. Attachment & detachment conflict.', upaay:'Ganapati Atharvashirsham, Hanuman Chalisa.' },
+      '4-8': { planet:'Rahu–Shani',         cls:'virodhi',     effects:'Extreme struggle. Sudden rise & fall. Mental stress. Heavy karmic patterns. Legal issues.', upaay:'Hanuman worship. Light diya under Peepal tree (Saturday). Strict ethical discipline.' },
+      '4-9': { planet:'Mangal–Rahu',        cls:'virodhi',     effects:'Hard work but money not received. Efforts go unrecognized. Sudden instability in career.', upaay:'Om Namah Shivaya chanting. Meditation. Listening to Rudram. Avoid shortcuts.' },
+      '5-6': { planet:'Budh–Shukra',        cls:'virodhi',     effects:'Unstable mind. Education distractions. Mid-level job stagnation. Love issues, delay in marriage.', upaay:'Vishnu Sahasranama. Mahalakshmi Ashtakam. Ganapati Atharvashirsha. Charity & generosity.' },
+      '5-7': { planet:'Budh–Ketu',          cls:'virodhi',     effects:'Restlessness. Lack of direction. Career confusion. Commitment issues.', upaay:'Om Ketave Namah. Meditation compulsory. Reduce overthinking.' },
+      '5-8': { planet:'Budh–Shani',         cls:'virodhi',     effects:'Business instability. Loss through partnerships. Miscommunication. Anxiety in decisions.', upaay:'Donate green items Wednesday. Structured planning. Mercury strengthening practices.' },
+      '5-9': { planet:'Budh–Mangal',        cls:'positive',    effects:'Strategy + action. Dynamic combination — excellent for business and execution.', upaay:'Structure if imbalanced.' },
+      '6-7': { planet:'Shukra–Ketu',        cls:'virodhi',     effects:'Relationship detachment. Disconnect between love and spirituality.', upaay:'Friday discipline.' },
+      '6-8': { planet:'Shukra–Shani',       cls:'virodhi',     effects:'Toxic relationships. Financial drain via relationships. Legal or emotional burdens.', upaay:'Mahalakshmi Ashtakam. Avoid indulgence. Serve women in need.' },
+      '6-9': { planet:'Shukra–Mangal',      cls:'positive',    effects:'Charisma + attraction. Passionate, magnetic personality.', upaay:'' },
+      '7-8': { planet:'Ketu–Shani',         cls:'virodhi',     effects:'Isolation, karmic burden, frustrations and loss of interest. Easily give up. Prone to mental illness.', upaay:'Serve elderly. Donate black on Saturday. Om Nama Shivay. Meditation compulsory.' },
+      '7-9': { planet:'Ketu–Mangal',        cls:'virodhi',     effects:'Spiritual confusion. Anger vs detachment conflict. Breaks in education/career.', upaay:'Hanuman Chalisa. Physical discipline. Om Ketave Namah.' },
+      '8-9': { planet:'Shani–Mangal',       cls:'virodhi',     effects:'Aggression + karmic clash. Accidents. Authority conflicts. Sudden losses.', upaay:'Donate red lentils Tuesday. Hanuman worship. Control impulsive actions.' },
+    };
+
+    const BADGE_LABELS = { positive: '✓ Positive', virodhi: '✗ Virodhi', conditional: '~ Conditional', neutral: '· Neutral' };
+
+    const grid = document.getElementById('yuti-grid');
+    const cards = [];
+
+    for (const [key, data] of Object.entries(YUTI_DATA)) {
+      const [n1, n2] = key.split('-');
+      const card = document.createElement('div');
+      card.className = `yuti-card ${data.cls}`;
+      card.dataset.cls = data.cls;
+      card.innerHTML = `
+        <div class="yuti-card-header">
+          <span class="yuti-nums">${n1} · ${n2}</span>
+          <span class="yuti-badge ${data.cls}">${BADGE_LABELS[data.cls]}</span>
+        </div>
+        <div class="yuti-planet">${data.planet}</div>
+        <div class="yuti-effects">${data.effects}</div>
+        ${data.upaay ? `<div class="yuti-upaay"><div class="upaay-label">Upaay</div>${data.upaay}</div>` : ''}
+      `;
+      grid.appendChild(card);
+      cards.push(card);
+    }
+
+    function filter(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      let visible = 0;
+      cards.forEach(c => {
+        const show = type === 'all' || c.dataset.cls === type;
+        c.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('count-label').textContent = visible;
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-theme');
+    }
+  </script>
+</body>
+</html>
