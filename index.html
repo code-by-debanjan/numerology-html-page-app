@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lo Shu Grid – Numerology</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a14;
+      --surface: #13132a;
+      --surface2: #0f0f22;
+      --accent: #e2b96f;
+      --accent2: #c084fc;
+      --text: #e8e8f0;
+      --text-muted: #7878a0;
+      --border: #252545;
+      --cell-bg: #0d0d20;
+      --cell-filled: #1a1a38;
+      --radius: 14px;
+      --sidebar-w: 280px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top nav bar ── */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .navbar-brand .logo {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem; color: #0a0a14;
+    }
+    .navbar-brand h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .navbar-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Page body: sidebar + main ── */
+    .page-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ── Left sidebar (input) ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+
+    .sidebar-section h2 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      color-scheme: dark;
+    }
+    input[type="date"]:focus { border-color: var(--accent); }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus { border-color: var(--accent); }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #b8860b, var(--accent));
+      border: none;
+      border-radius: 8px;
+      color: #0a0a14;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 1rem;
+    }
+    button:hover { opacity: 0.9; transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    /* Legend in sidebar */
+    .legend { display: flex; flex-direction: column; gap: 0.6rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.65rem; font-size: 0.8rem; color: var(--text-muted); }
+    .legend-swatch {
+      width: 28px; height: 22px; border-radius: 5px; flex-shrink: 0;
+      border: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: center; font-size: 0.7rem; font-weight: 700;
+    }
+    .legend-swatch.empty { background: var(--cell-bg); color: var(--border); }
+    .legend-swatch.filled { background: var(--cell-filled); border-color: #3a3a6a; color: var(--accent2); }
+    .legend-swatch.strong { background: var(--cell-filled); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 8px rgba(226,185,111,0.2); }
+
+    /* ── Main content area ── */
+    main {
+      flex: 1;
+      padding: 2rem 2.5rem;
+      overflow-y: auto;
+    }
+
+    /* Empty state */
+    .empty-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      gap: 1rem;
+      padding: 4rem 2rem;
+    }
+    .empty-state .big-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 8px;
+      opacity: 0.2;
+    }
+    .empty-state .big-grid .e {
+      width: 60px; height: 60px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 8px;
+    }
+    .empty-state p { font-size: 1rem; }
+
+    /* ── Result layout: 3-column ── */
+    #result { display: none; }
+
+    .result-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-header h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .result-header .dob-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.25rem 0.85rem;
+      font-size: 0.82rem;
+      color: var(--accent);
+    }
+
+    /* ── 3-column grid ── */
+    .result-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    /* Left column */
+    .col-left { display: flex; flex-direction: column; gap: 1.25rem; }
+    /* Centre column */
+    .col-center { display: flex; flex-direction: column; gap: 1.25rem; }
+    /* Right column */
+    .col-right { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    /* ── Card component ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 1.1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Lo Shu Grid ── */
+    .loshu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .cell {
+      aspect-ratio: 1;
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .cell.filled { background: var(--cell-filled); border-color: #3a3a6a; }
+    .cell.filled.strong {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(226,185,111,0.18);
+    }
+    .cell-number {
+      position: absolute;
+      top: 6px; right: 8px;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .cell.filled .cell-number { color: var(--accent); }
+    .cell-dots {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      line-height: 1.2;
+      text-align: center;
+      word-break: break-all;
+      padding: 0 4px;
+    }
+
+    /* ── Life Path ── */
+    .life-path-big {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .life-path-number {
+      font-size: 4.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .life-path-info strong {
+      display: block;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .life-path-info span { font-size: 0.82rem; color: var(--text-muted); }
+    .life-path-calc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
+    }
+
+    .grid-sublabel {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Planes ── */
+    .planes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+    .plane-item {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.8rem;
+    }
+    .plane-item .plane-name {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .plane-item .plane-nums {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .plane-item .plane-nums .present { color: var(--accent); }
+    .plane-item .plane-nums .absent  { color: var(--border); }
+
+    /* ── Core Numbers row ── */
+    .core-numbers-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .core-num-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .core-num-value {
+      font-size: 2.6rem;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .core-num-card.birth .core-num-value {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .core-num-card.destiny .core-num-value {
+      background: linear-gradient(135deg, #f472b6, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .core-num-card.name .core-num-value {
+      background: linear-gradient(135deg, #34d399, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .core-num-card.lifepath .core-num-value {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .core-num-card.lifepath .life-path-calc {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+      border: none;
+      padding: 0;
+      line-height: 1.5;
+    }
+    .core-num-meta strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .core-num-meta span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .core-num-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── Digit frequency ── */
+    .freq-bar-list { display: flex; flex-direction: column; gap: 0.55rem; }
+    .freq-row { display: flex; align-items: center; gap: 0.75rem; }
+    .freq-num {
+      width: 20px; text-align: center;
+      font-size: 0.85rem; font-weight: 700; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .freq-bar-track {
+      flex: 1; height: 8px;
+      background: var(--cell-bg);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .freq-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    .freq-count {
+      width: 20px; text-align: right;
+      font-size: 0.75rem; color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* ── Missing numbers ── */
+    .missing-list {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .missing-badge {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .no-missing { color: var(--accent); font-size: 0.88rem; }
+
+    /* ── Yutis ── */
+    .yuti-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .yuti-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .yuti-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--cell-bg);
+      border: 1px solid #3a3a6a;
+      border-radius: 20px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+    .yuti-badge .sep {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 0.8rem;
+    }
+    .no-yuti {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .cell.yuti-active {
+      border-color: var(--accent2) !important;
+      box-shadow: 0 0 12px rgba(192,132,252,0.22);
+    }
+    .yuti-full-card h3 { margin-bottom: 0.4rem; }
+    .yuti-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .yuti-card-item {
+      background: var(--cell-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      border-left: 3px solid var(--border);
+    }
+    .yuti-card-item.positive  { border-left-color: #4ade80; }
+    .yuti-card-item.virodhi   { border-left-color: #f87171; }
+    .yuti-card-item.neutral   { border-left-color: #94a3b8; }
+    .yuti-card-item.conditional { border-left-color: #facc15; }
+    .yuti-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+      gap: 0.5rem;
+    }
+    .yuti-nums {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent2);
+    }
+    .yuti-nums .sep { color: var(--text-muted); font-weight: 400; margin: 0 0.2rem; }
+    .yuti-planet {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .yuti-class-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.18rem 0.55rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .yuti-class-badge.positive    { background: rgba(74,222,128,0.12); color: #4ade80; }
+    .yuti-class-badge.virodhi     { background: rgba(248,113,113,0.12); color: #f87171; }
+    .yuti-class-badge.neutral     { background: rgba(148,163,184,0.12); color: #94a3b8; }
+    .yuti-class-badge.conditional { background: rgba(250,204,21,0.12);  color: #facc15; }
+    .yuti-effects {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+    .yuti-upaay {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      border-top: 1px solid var(--border);
+      padding-top: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .yuti-upaay strong { color: var(--accent); display: block; margin-bottom: 0.15rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; }
+
+    /* ── Responsive: collapse to single column below 900px ── */
+    @media (max-width: 1100px) {
+      .result-columns { grid-template-columns: 1fr 1fr; }
+      .col-analysis { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+      .core-numbers-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 760px) {
+      .page-body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
+      .result-columns { grid-template-columns: 1fr; }
+      .col-analysis { grid-column: 1; display: flex; flex-direction: column; }
+      .core-numbers-row { grid-template-columns: 1fr 1fr; }
+      main { padding: 1.5rem 1rem; }
+      .navbar { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="logo">☰</div>
+      <h1>Lo Shu Grid</h1>
+    </div>
+    <span class="navbar-sub">Numerology · Date of Birth Analysis</span>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- Left sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h2>Input</h2>
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" max="" />
+        <label for="name" style="margin-top:1rem;">Full Name</label>
+        <input type="text" id="name" placeholder="Enter full name" autocomplete="off" />
+        <button onclick="calculate()">Generate Grid</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>Legend</h2>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-swatch empty">—</div>
+            <span>Number absent from DOB</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch filled">1</div>
+            <span>Number present</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch strong">3</div>
+            <span>Appears 3+ times (strong)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>Grid Layout</h2>
+        <div class="legend" style="font-size:0.78rem; color: var(--text-muted); line-height:2;">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;text-align:center;font-family:monospace;">
+            <span style="color:var(--accent)">4</span><span style="color:var(--accent)">9</span><span style="color:var(--accent)">2</span>
+            <span style="color:var(--accent)">3</span><span style="color:var(--accent)">5</span><span style="color:var(--accent)">7</span>
+            <span style="color:var(--accent)">8</span><span style="color:var(--accent)">1</span><span style="color:var(--accent)">6</span>
+          </div>
+          <p style="margin-top:0.5rem">Classic 3×3 magic square arrangement</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="empty-state">
+        <div class="big-grid">
+          <div class="e"></div><div class="e"></div><div class="e"></div>
+          <div class="e"></div><div class="e"></div><div class="e"></div>
+          <div class="e"></div><div class="e"></div><div class="e"></div>
+        </div>
+        <p>Enter your date of birth to generate your Lo Shu Grid</p>
+      </div>
+
+      <!-- Result -->
+      <div id="result">
+
+        <div class="result-header">
+          <h2>Numerology Reading</h2>
+          <span class="dob-chip" id="dob-label"></span>
+        </div>
+
+        <!-- Core numbers: Birth | Destiny | Name | Life Path -->
+        <div class="core-numbers-row">
+          <div class="core-num-card birth">
+            <div class="core-num-value" id="birth-num"></div>
+            <div class="core-num-meta">
+              <div class="core-num-label">Birth Number</div>
+              <strong id="birth-num-name"></strong>
+              <span>Day of birth reduced</span>
+            </div>
+          </div>
+          <div class="core-num-card destiny">
+            <div class="core-num-value" id="destiny-num"></div>
+            <div class="core-num-meta">
+              <div class="core-num-label">Destiny Number</div>
+              <strong id="destiny-num-name"></strong>
+              <span>Full DOB summed &amp; reduced</span>
+            </div>
+          </div>
+          <div class="core-num-card name" id="name-num-card" style="display:none">
+            <div class="core-num-value" id="name-num"></div>
+            <div class="core-num-meta">
+              <div class="core-num-label">Name Number</div>
+              <strong id="name-num-name"></strong>
+              <span id="name-num-sub">Chaldean numerology</span>
+            </div>
+          </div>
+          <div class="core-num-card lifepath">
+            <div class="core-num-value" id="life-path-num"></div>
+            <div class="core-num-meta">
+              <div class="core-num-label">Life Path</div>
+              <strong id="life-path-name"></strong>
+              <div class="life-path-calc" id="life-path-calc"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-columns">
+
+          <!-- Column 1: Lo Shu Grid -->
+          <div class="col-left">
+            <div class="card">
+              <h3>Lo Shu Grid</h3>
+              <div class="loshu-grid" id="grid"></div>
+            </div>
+          </div>
+
+          <!-- Column 2: Vedic Grid -->
+          <div class="col-center">
+            <div class="card">
+              <h3>Vedic Grid</h3>
+              <div class="loshu-grid" id="vedic-grid"></div>
+              <p class="grid-sublabel">3-1-9 / 6-7-5 / 2-8-4 · No century · Single occurrence</p>
+            </div>
+          </div>
+
+          <!-- Column 3: Planes + Missing + Frequency -->
+          <div class="col-analysis">
+            <div class="card">
+              <h3>Planes of Existence</h3>
+              <div class="planes-grid" id="planes"></div>
+            </div>
+            <div class="card">
+              <h3>Missing Numbers · Karmic Lessons</h3>
+              <div id="missing-numbers"></div>
+            </div>
+            <div class="card">
+              <h3>Digit Frequency</h3>
+              <div class="freq-bar-list" id="freq-bars"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Full-width Yutis row -->
+        <div class="card yuti-full-card" id="yuti-section" style="display:none; margin-top:1.5rem;">
+          <h3>Vedic Yutis — Planetary Connections</h3>
+          <p class="yuti-subtitle">Connections formed between adjacent present numbers in your Vedic Grid</p>
+          <div class="yuti-cards" id="yuti-list"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Set max date to today
+    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+
+    // Lo Shu Grid layout: position index 0-8 maps to numbers displayed
+    // Grid:  4 9 2
+    //        3 5 7
+    //        8 1 6
+    const GRID_LAYOUT = [4, 9, 2, 3, 5, 7, 8, 1, 6];
+
+    // Chaldean letter-to-number map (9 is sacred — not assigned)
+    const CHALDEAN = {
+      a:1,i:1,j:1,q:1,y:1,
+      b:2,k:2,r:2,
+      c:3,g:3,l:3,s:3,
+      d:4,m:4,t:4,
+      e:5,h:5,n:5,x:5,
+      u:6,v:6,w:6,
+      o:7,z:7,
+      f:8,p:8
+    };
+
+    function calcNameNumber(name) {
+      const letters = name.toLowerCase().replace(/[^a-z]/g, '').split('');
+      if (letters.length === 0) return null;
+      const sum = letters.reduce((acc, ch) => acc + (CHALDEAN[ch] || 0), 0);
+      return { sum, reduced: reduceToSingle(sum, true) };
+    }
+
+    // Yuti data keyed as 'min-max'
+    const YUTI_DATA = {
+      '1-2': { planet:'Surya–Chandra',      cls:'positive',    effects:'Leadership + emotional intelligence, public connection.', upaay:'' },
+      '1-3': { planet:'Surya–Guru',         cls:'positive',    effects:'High education. Respect in society. Strong leadership with wisdom. Success in govt, legal, teaching, consulting. Father support. Self-made success.', upaay:'' },
+      '1-4': { planet:'Surya–Rahu',         cls:'virodhi',     effects:'Identity confusion, authority clashes, too much fire power, impatient.', upaay:'Aditya Hridayam, Hanuman worship.' },
+      '1-5': { planet:'Surya–Budh',         cls:'positive',    effects:'Sharp intellect. Communication excellence. Business success. Marketing, media, consulting strength. Quick decision making.', upaay:'' },
+      '1-6': { planet:'Surya–Shukra',       cls:'virodhi',     effects:'Ego clashes in relationships. Attraction but instability. Financial fluctuations due to decisions.', upaay:'Chant Om Shukraya Namah. Offer white sweets Friday. Practice humility. Strengthen Sun routine.' },
+      '1-7': { planet:'Surya–Ketu',         cls:'neutral',     effects:'Spiritual leadership, detachment, secretive.', upaay:'Grounding, Surya Namaskar.' },
+      '1-8': { planet:'Shani–Surya',        cls:'virodhi',     effects:'Problems in life. Apamaan yog (defamation). Authority conflicts. Delays in govt matters. Restlessness.', upaay:'Practice discipline & humility. Offer water to Sun daily. Hanuman Chalisa. Light sesame oil diya on Saturdays.' },
+      '1-9': { planet:'Surya–Mangal',       cls:'positive',    effects:'Strong leadership. Fearless decision maker. Entrepreneur mindset. Success in business, surgery, administration. Action-oriented personality.', upaay:'' },
+      '2-3': { planet:'Chandra–Guru',       cls:'positive',    effects:'Wisdom + emotional balance. Spiritual growth. Teaching ability. Respect in family and society. Stable mindset.', upaay:'' },
+      '2-4': { planet:'Chandra–Rahu',       cls:'virodhi',     effects:'Family disputes. Accident yog. Eye/heart concerns. Wrong company/friends.', upaay:'Donate white items on Monday. Om Namah Shivaya. Devi Kavacham. Emotional discipline.' },
+      '2-5': { planet:'Chandra–Budh',       cls:'positive',    effects:'Emotional intelligence + logic. Excellent communication. Writing, counseling, teaching success.', upaay:'' },
+      '2-6': { planet:'Chandra–Shukra',     cls:'positive',    effects:'Emotional intelligence. Strong relationships. Comfort, luxury, artistic inclination. Family-oriented success.', upaay:'' },
+      '2-7': { planet:'Chandra–Ketu',       cls:'virodhi',     effects:'Overthinking. Emotional confusion. Isolation. Trust issues.', upaay:'Om Som Somaya Namah. Moon strengthening. Meditation near water. Grounding practices.' },
+      '2-8': { planet:'Chandra–Shani',      cls:'virodhi',     effects:'Depression tendencies. Emotional suppression. Financial delays. Betrayals.', upaay:'Mahamrityunjaya Mantra. Donate milk Mondays. Serve elderly. Stabilize routine.' },
+      '2-9': { planet:'Chandra–Mangal',     cls:'conditional', effects:'Emotional courage, impulsiveness, actions based on emotions, not confident to dare.', upaay:'Donate milk Monday, Om Nama Shivay.' },
+      '3-4': { planet:'Guru–Rahu',          cls:'virodhi',     effects:'Guru Chandal yog — wrong judgement, misleading guidance.', upaay:'Guru worship.' },
+      '3-5': { planet:'Guru–Budh',          cls:'positive',    effects:'Knowledge + communication mastery. Teacher, speaker, advisor, strategist. Strong analytical mind. Success in education & training fields.', upaay:'' },
+      '3-6': { planet:'Guru–Shukra',        cls:'conditional', effects:'Over-indulgence risk but also education + luxury balance. Dharmik nature. Growth after marriage. Creative intelligence.', upaay:'Guru Pooja. Avoid excess luxury. Om Gurave Namah. Discipline practices.' },
+      '3-7': { planet:'Guru–Ketu',          cls:'positive',    effects:'Spiritual wisdom. Guru kripa. Strong intuition. Success in teaching, healing, spiritual guidance.', upaay:'' },
+      '3-8': { planet:'Guru–Shani',         cls:'virodhi',     effects:'Knowledge but delayed results. Career stagnation despite effort. Slow but guaranteed success. Strong in structured careers, judiciary.', upaay:'Donate books. Vishnu Sahasranama. Patience sadhana. Help students.' },
+      '3-9': { planet:'Guru–Mangal',        cls:'virodhi',     effects:'High effort, low returns. Difficulty completing education. Political mindset but instability.', upaay:'Guru Pooja. Gratitude practice. Hanuman Chalisa. Guidance from mentor required.' },
+      '4-5': { planet:'Rahu–Budh',          cls:'conditional', effects:'Innovation, digital success, unconventional thinking. Growth in technology, marketing, startups.', upaay:'' },
+      '4-6': { planet:'Rahu–Shukra',        cls:'virodhi',     effects:'Relationship instability. Love-marriage complications. Financial impulsiveness. Glamour and mass appeal if balanced.', upaay:'Durga Saptashati. Offer white flowers Friday. Avoid shortcuts.' },
+      '4-7': { planet:'Rahu–Ketu',          cls:'virodhi',     effects:'Confusion, start-stop cycles, instability. Ups and downs. Attachment & detachment conflict.', upaay:'Ganapati Atharvashirsham, Hanuman Chalisa.' },
+      '4-8': { planet:'Rahu–Shani',         cls:'virodhi',     effects:'Extreme struggle. Sudden rise & fall. Mental stress. Heavy karmic patterns. Legal issues.', upaay:'Hanuman worship. Light diya under Peepal tree (Saturday). Strict ethical discipline.' },
+      '4-9': { planet:'Mangal–Rahu',        cls:'virodhi',     effects:'Hard work but money not received. Efforts go unrecognized. Sudden instability in career.', upaay:'Om Namah Shivaya chanting. Meditation. Listening to Rudram. Avoid shortcuts.' },
+      '5-6': { planet:'Budh–Shukra',        cls:'virodhi',     effects:'Unstable mind. Education distractions. Mid-level job stagnation. Love issues, delay in marriage.', upaay:'Vishnu Sahasranama. Mahalakshmi Ashtakam. Ganapati Atharvashirsha. Charity & generosity.' },
+      '5-7': { planet:'Budh–Ketu',          cls:'virodhi',     effects:'Restlessness. Lack of direction. Career confusion. Commitment issues.', upaay:'Om Ketave Namah. Meditation compulsory. Reduce overthinking.' },
+      '5-8': { planet:'Budh–Shani',         cls:'virodhi',     effects:'Business instability. Loss through partnerships. Miscommunication. Anxiety in decisions.', upaay:'Donate green items Wednesday. Structured planning. Mercury strengthening practices.' },
+      '5-9': { planet:'Budh–Mangal',        cls:'positive',    effects:'Strategy + action. Dynamic combination — excellent for business and execution.', upaay:'Structure if imbalanced.' },
+      '6-7': { planet:'Shukra–Ketu',        cls:'virodhi',     effects:'Relationship detachment. Disconnect between love and spirituality.', upaay:'Friday discipline.' },
+      '6-8': { planet:'Shukra–Shani',       cls:'virodhi',     effects:'Toxic relationships. Financial drain via relationships. Legal or emotional burdens.', upaay:'Mahalakshmi Ashtakam. Avoid indulgence. Serve women in need.' },
+      '6-9': { planet:'Shukra–Mangal',      cls:'positive',    effects:'Charisma + attraction. Passionate, magnetic personality.', upaay:'' },
+      '7-8': { planet:'Ketu–Shani',         cls:'virodhi',     effects:'Isolation, karmic burden, frustrations and loss of interest. Easily give up. Prone to mental illness.', upaay:'Serve elderly. Donate black on Saturday. Om Nama Shivay. Meditation compulsory.' },
+      '7-9': { planet:'Ketu–Mangal',        cls:'virodhi',     effects:'Spiritual confusion. Anger vs detachment conflict. Breaks in education/career.', upaay:'Hanuman Chalisa. Physical discipline. Om Ketave Namah.' },
+      '8-9': { planet:'Shani–Mangal',       cls:'virodhi',     effects:'Aggression + karmic clash. Accidents. Authority conflicts. Sudden losses.', upaay:'Donate red lentils Tuesday. Hanuman worship. Control impulsive actions.' },
+    };
+
+    const LIFE_PATH_NAMES = {
+      1: 'The Leader', 2: 'The Diplomat', 3: 'The Communicator',
+      4: 'The Builder', 5: 'The Freedom Seeker', 6: 'The Nurturer',
+      7: 'The Seeker', 8: 'The Achiever', 9: 'The Humanitarian',
+      11: 'The Intuitive', 22: 'The Master Builder', 33: 'The Master Teacher'
+    };
+
+    const PLANES = [
+      { name: 'Mental Plane',    numbers: [4, 9, 2], desc: 'Top row' },
+      { name: 'Emotional Plane', numbers: [3, 5, 7], desc: 'Middle row' },
+      { name: 'Practical Plane', numbers: [8, 1, 6], desc: 'Bottom row' },
+      { name: 'Thought Plane',   numbers: [4, 3, 8], desc: 'Left column' },
+      { name: 'Will Plane',      numbers: [9, 5, 1], desc: 'Centre column' },
+      { name: 'Action Plane',    numbers: [2, 7, 6], desc: 'Right column' },
+    ];
+
+    function reduceToSingle(n, allowMaster = true) {
+      if (allowMaster && (n === 11 || n === 22 || n === 33)) return n;
+      if (n < 10) return n;
+      return reduceToSingle(String(n).split('').reduce((a, d) => a + +d, 0), allowMaster);
+    }
+
+    function calcLifePath(day, month, year) {
+      // Reduce each component separately, then sum
+      const d = reduceToSingle(day, false);
+      const m = reduceToSingle(month, false);
+      const y = reduceToSingle(year, false);
+      const sum = d + m + y;
+      return reduceToSingle(sum, true);
+    }
+
+    function formatCalcSteps(day, month, year) {
+      const dStr = String(day).split('').join('+');
+      const mStr = String(month).split('').join('+');
+      const yStr = String(year).split('').join('+');
+      const d = reduceToSingle(day, false);
+      const m = reduceToSingle(month, false);
+      const y = reduceToSingle(year, false);
+      const sum = d + m + y;
+      const lp  = reduceToSingle(sum, true);
+      const parts = [];
+      if (String(day).length > 1)   parts.push(`${dStr} = ${d}`);
+      if (String(month).length > 1) parts.push(`${mStr} = ${m}`);
+      const yDigits = String(year).split('').join('+');
+      parts.push(`${yDigits} = ${y}`);
+      return `${parts.join(' · ')} → ${d}+${m}+${y} = ${sum}${sum !== lp ? ' → ' + lp : ''}`;
+    }
+
+    function calculate() {
+      const val = document.getElementById('dob').value;
+      if (!val) { alert('Please select a date of birth.'); return; }
+
+      const [yr, mo, dy] = val.split('-').map(Number);
+      const day = dy, month = mo, year = yr;
+
+      // Collect raw DOB digits (ignore 0s)
+      const rawDigits = `${String(day).padStart(2,'0')}${String(month).padStart(2,'0')}${year}`;
+      const counts = {};
+      for (let i = 1; i <= 9; i++) counts[i] = 0;
+      for (const ch of rawDigits) {
+        const d = +ch;
+        if (d >= 1 && d <= 9) counts[d]++;
+      }
+
+      // Birth Number (day reduced to 1-9, no master numbers for grid placement)
+      const bn = reduceToSingle(day, true);
+      const bnGrid = reduceToSingle(day, false); // 1–9 only for grid
+      if (bnGrid >= 1 && bnGrid <= 9) counts[bnGrid]++;
+
+      // Destiny Number (all DOB digits summed, reduced to 1-9 for grid)
+      const destSum = rawDigits.split('').reduce((a, ch) => a + +ch, 0);
+      const dn = reduceToSingle(destSum, true);
+      const dnGrid = reduceToSingle(destSum, false); // 1–9 only for grid
+      if (dnGrid >= 1 && dnGrid <= 9) counts[dnGrid]++;
+
+      // Name Number (Chaldean)
+      const nameVal = document.getElementById('name').value.trim();
+      const nameResult = calcNameNumber(nameVal);
+      const nameCard = document.getElementById('name-num-card');
+      if (nameResult) {
+        document.getElementById('name-num').textContent = nameResult.reduced;
+        document.getElementById('name-num-name').textContent = LIFE_PATH_NAMES[nameResult.reduced] || '';
+        document.getElementById('name-num-sub').textContent = `Chaldean · sum ${nameResult.sum}`;
+        nameCard.style.display = 'flex';
+      } else {
+        nameCard.style.display = 'none';
+      }
+
+      document.getElementById('birth-num').textContent = bn;
+      document.getElementById('birth-num-name').textContent = LIFE_PATH_NAMES[bn] || '';
+      document.getElementById('destiny-num').textContent = dn;
+      document.getElementById('destiny-num-name').textContent = LIFE_PATH_NAMES[dn] || '';
+
+      // Hide empty state, show result
+      document.getElementById('empty-state').style.display = 'none';
+
+      // Render grid
+      const gridEl = document.getElementById('grid');
+      gridEl.innerHTML = '';
+      GRID_LAYOUT.forEach(num => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        const cnt = counts[num];
+        if (cnt > 0) {
+          cell.classList.add('filled');
+          if (cnt >= 3) cell.classList.add('strong');
+        }
+        cell.innerHTML = `<span class="cell-number">${num}</span>
+          <span class="cell-dots">${cnt > 0 ? String(num).repeat(cnt) : ''}</span>`;
+        gridEl.appendChild(cell);
+      });
+
+      // Vedic Grid (layout: 3 1 9 / 6 7 5 / 2 8 4)
+      // Rules: 1) No century digits (only last 2 digits of year)
+      //        2) Each digit shown at most once (presence only, no repeats)
+      const yearLast2 = String(year).slice(-2); // e.g. 1990 → "90", 2025 → "25"
+      const vedicRaw = `${String(day).padStart(2,'0')}${String(month).padStart(2,'0')}${yearLast2}`;
+      const vedicPresent = new Set();
+      for (const ch of vedicRaw) {
+        const d = +ch;
+        if (d >= 1 && d <= 9) vedicPresent.add(d);
+      }
+      // Also include Birth Number and Destiny Number (single digit)
+      if (bnGrid >= 1 && bnGrid <= 9) vedicPresent.add(bnGrid);
+      if (dnGrid >= 1 && dnGrid <= 9) vedicPresent.add(dnGrid);
+
+      const VEDIC_LAYOUT = [3, 1, 9, 6, 7, 5, 2, 8, 4];
+      // All lines: 3 rows, 3 cols, 2 diagonals (indices into VEDIC_LAYOUT)
+      const VEDIC_LINES = [
+        [0,1,2],[3,4,5],[6,7,8],   // rows
+        [0,3,6],[1,4,7],[2,5,8],   // cols
+        [0,4,8],[2,4,6]            // diagonals
+      ];
+
+      // Compute yutis: both endpoints present, all cells between absent
+      const yutis = [];
+      const yutiSeen = new Set();
+      for (const line of VEDIC_LINES) {
+        for (let i = 0; i < line.length; i++) {
+          for (let j = i + 1; j < line.length; j++) {
+            const numA = VEDIC_LAYOUT[line[i]];
+            const numB = VEDIC_LAYOUT[line[j]];
+            if (!vedicPresent.has(numA) || !vedicPresent.has(numB)) continue;
+            let bridgeClear = true;
+            for (let k = i + 1; k < j; k++) {
+              if (vedicPresent.has(VEDIC_LAYOUT[line[k]])) { bridgeClear = false; break; }
+            }
+            if (bridgeClear) {
+              const key = [numA, numB].sort((a, b) => a - b).join('-');
+              if (!yutiSeen.has(key)) { yutiSeen.add(key); yutis.push([numA, numB]); }
+            }
+          }
+        }
+      }
+      const yutiNums = new Set(yutis.flat());
+
+      const vedicEl = document.getElementById('vedic-grid');
+      vedicEl.innerHTML = '';
+      VEDIC_LAYOUT.forEach(num => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        const present = vedicPresent.has(num);
+        if (present) cell.classList.add('filled');
+        if (present && yutiNums.has(num)) cell.classList.add('yuti-active');
+        cell.innerHTML = `<span class="cell-number">${num}</span>
+          <span class="cell-dots">${present ? num : ''}</span>`;
+        vedicEl.appendChild(cell);
+      });
+
+      // Render yuti detailed cards
+      const yutiSection = document.getElementById('yuti-section');
+      const yutiListEl  = document.getElementById('yuti-list');
+      yutiSection.style.display = yutis.length === 0 ? 'none' : 'block';
+      if (yutis.length === 0) {
+        yutiListEl.innerHTML = '';
+      } else {
+        yutiListEl.innerHTML = yutis.map(([a, b]) => {
+          const key  = [a, b].sort((x,y) => x-y).join('-');
+          const data = YUTI_DATA[key];
+          if (!data) return `<div class="yuti-card-item neutral"><div class="yuti-card-header"><span class="yuti-nums">${a}<span class="sep">—</span>${b}</span></div></div>`;
+          const clsKey = data.cls.toLowerCase().replace(/[^a-z]/g,'').replace('highlyvirodhi','virodhi').replace('conditionalpositive','conditional').replace('dynamicpositive','positive');
+          return `<div class="yuti-card-item ${clsKey}">
+            <div class="yuti-card-header">
+              <span class="yuti-nums">${a}<span class="sep">—</span>${b}</span>
+              <span class="yuti-class-badge ${clsKey}">${data.cls}</span>
+            </div>
+            <div class="yuti-planet">${data.planet}</div>
+            <div class="yuti-effects">${data.effects}</div>
+            ${data.upaay ? `<div class="yuti-upaay"><strong>Upaay</strong>${data.upaay}</div>` : ''}
+          </div>`;
+        }).join('');
+      }
+
+      // Life path
+      const lp = calcLifePath(day, month, year);
+      document.getElementById('life-path-num').textContent  = lp;
+      document.getElementById('life-path-name').textContent = LIFE_PATH_NAMES[lp] || '';
+      document.getElementById('life-path-calc').textContent = formatCalcSteps(day, month, year);
+
+      // Planes
+      const planesEl = document.getElementById('planes');
+      planesEl.innerHTML = '';
+      PLANES.forEach(pl => {
+        const div = document.createElement('div');
+        div.className = 'plane-item';
+        const numsHtml = pl.numbers.map(n =>
+          `<span class="${counts[n] > 0 ? 'present' : 'absent'}">${n}</span>`
+        ).join(' · ');
+        div.innerHTML = `<div class="plane-name">${pl.name}</div>
+                         <div class="plane-nums">${numsHtml}</div>`;
+        planesEl.appendChild(div);
+      });
+
+      // Missing numbers
+      const missing = Object.entries(counts).filter(([,v]) => v === 0).map(([k]) => +k);
+      const missingEl = document.getElementById('missing-numbers');
+      if (missing.length === 0) {
+        missingEl.innerHTML = '<span class="no-missing">No missing numbers — all 1–9 present!</span>';
+      } else {
+        missingEl.innerHTML = `<div class="missing-list">${
+          missing.map(n => `<span class="missing-badge">${n}</span>`).join('')
+        }</div>`;
+      }
+
+      // Digit frequency bars
+      const maxCount = Math.max(...Object.values(counts), 1);
+      const freqEl = document.getElementById('freq-bars');
+      freqEl.innerHTML = '';
+      for (let i = 1; i <= 9; i++) {
+        const pct = Math.round((counts[i] / maxCount) * 100);
+        freqEl.innerHTML += `
+          <div class="freq-row">
+            <span class="freq-num">${i}</span>
+            <div class="freq-bar-track">
+              <div class="freq-bar-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="freq-count">${counts[i]}</span>
+          </div>`;
+      }
+
+      // DOB label
+      const formatted = new Date(year, month - 1, day)
+        .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('dob-label').textContent = formatted;
+
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
